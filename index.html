@@ -7,251 +7,103 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&family=Pacifico&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Space Mono', monospace;
-      background: #07060e;
-      color: #c0c0e0;
-      overflow-x: hidden;
-      min-height: 100vh;
-      user-select: none;
-    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:'Space Mono',monospace;background:#07060e;color:#c0c0e0;overflow-x:hidden;min-height:100vh;user-select:none}
 
-    /* ===== PARTICLES ===== */
-    #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    /* particles */
+    #particles{position:fixed;inset:0;z-index:0;pointer-events:none}
 
-    /* ===== PROGRESS ===== */
-    .topbar {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
-      background: rgba(7,6,14,.92); backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(120,80,255,.12);
-      padding: 10px 24px; display: none; align-items: center; gap: 12px;
-    }
-    .topbar.show { display: flex; }
-    .topbar .lbl { font-family: 'Orbitron', sans-serif; font-size: .6rem; letter-spacing: 3px; color: #7e60c0; }
-    .topbar .bar { flex: 1; height: 5px; background: rgba(120,80,255,.1); border-radius: 4px; overflow: hidden; }
-    .topbar .bar .fill { height: 100%; width: 0%; background: linear-gradient(90deg,#7850ff,#c084fc); border-radius: 4px; transition: width .7s ease; }
-    .topbar .num { font-family: 'Orbitron', sans-serif; font-size: .72rem; color: #c084fc; }
+    /* progress */
+    .topbar{position:fixed;top:0;left:0;right:0;z-index:500;background:rgba(7,6,14,.94);backdrop-filter:blur(14px);border-bottom:1px solid rgba(120,80,255,.1);padding:10px 24px;display:none;align-items:center;gap:12px}
+    .topbar.show{display:flex}
+    .topbar .lbl{font-family:'Orbitron',sans-serif;font-size:.58rem;letter-spacing:3px;color:#7e60c0}
+    .topbar .bar{flex:1;height:5px;background:rgba(120,80,255,.1);border-radius:4px;overflow:hidden}
+    .topbar .bar .fill{height:100%;width:0%;background:linear-gradient(90deg,#7850ff,#c084fc);border-radius:4px;transition:width .7s ease}
+    .topbar .num{font-family:'Orbitron',sans-serif;font-size:.72rem;color:#c084fc}
 
-    /* ===== SCREENS ===== */
-    .screen {
-      position: relative; z-index: 2;
-      display: none; flex-direction: column; align-items: center; justify-content: center;
-      min-height: 100vh; padding: 2rem; text-align: center;
-    }
-    .screen.active { display: flex; animation: fadeUp .7s ease; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    /* screens */
+    .screen{position:relative;z-index:2;display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;text-align:center}
+    .screen.active{display:flex;animation:fadeUp .7s ease}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 
-    /* ===== PORTAL RING ===== */
-    .ring {
-      width: 220px; height: 220px; border-radius: 50%;
-      border: 3px solid rgba(120,80,255,.5);
-      box-shadow: 0 0 50px rgba(120,80,255,.4), inset 0 0 50px rgba(120,80,255,.25);
-      display: flex; align-items: center; justify-content: center;
-      animation: pulse 3s ease-in-out infinite; margin-bottom: 2rem; position: relative;
-    }
-    .ring::before {
-      content: ''; position: absolute; inset: -8px; border-radius: 50%;
-      border: 2px dashed rgba(200,140,255,.2); animation: spin 14s linear infinite;
-    }
-    @keyframes pulse {
-      0%,100% { transform: scale(1); box-shadow: 0 0 50px rgba(120,80,255,.4), inset 0 0 50px rgba(120,80,255,.25); }
-      50% { transform: scale(1.05); box-shadow: 0 0 80px rgba(120,80,255,.6), inset 0 0 70px rgba(120,80,255,.35); }
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    .ring .ico { font-size: 4.5rem; animation: bob 3.5s ease-in-out infinite; }
+    /* portal ring */
+    .ring{width:220px;height:220px;border-radius:50%;border:3px solid rgba(120,80,255,.5);box-shadow:0 0 50px rgba(120,80,255,.4),inset 0 0 50px rgba(120,80,255,.25);display:flex;align-items:center;justify-content:center;animation:pulse 3s ease-in-out infinite;margin-bottom:2rem;position:relative}
+    .ring::before{content:'';position:absolute;inset:-8px;border-radius:50%;border:2px dashed rgba(200,140,255,.2);animation:spin 14s linear infinite}
+    @keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 50px rgba(120,80,255,.4),inset 0 0 50px rgba(120,80,255,.25)}50%{transform:scale(1.05);box-shadow:0 0 80px rgba(120,80,255,.6),inset 0 0 70px rgba(120,80,255,.35)}}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    .ring .ico{font-size:4.5rem;animation:bob 3.5s ease-in-out infinite}
 
-    h1.title {
-      font-family: 'Orbitron', sans-serif; font-weight: 900;
-      font-size: clamp(1.6rem,5vw,2.6rem); letter-spacing: 3px;
-      background: linear-gradient(90deg,#7850ff,#c084fc,#7850ff); background-size: 200% 100%;
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      animation: shimmer 5s linear infinite; margin-bottom: .8rem;
-    }
-    @keyframes shimmer { to { background-position: 200% 0; } }
-    .sub { max-width: 480px; font-size: .88rem; line-height: 1.7; opacity: .7; margin-bottom: 2rem; }
+    h1.title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(1.6rem,5vw,2.6rem);letter-spacing:3px;background:linear-gradient(90deg,#7850ff,#c084fc,#7850ff);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 5s linear infinite;margin-bottom:.8rem}
+    @keyframes shimmer{to{background-position:200% 0}}
+    .sub{max-width:500px;font-size:.88rem;line-height:1.7;opacity:.7;margin-bottom:2rem}
+    .btn{font-family:'Orbitron',sans-serif;font-weight:700;font-size:.85rem;padding:14px 42px;border:2px solid #7850ff;background:transparent;color:#c084fc;border-radius:50px;cursor:pointer;letter-spacing:2px;transition:all .35s}
+    .btn:hover{background:rgba(120,80,255,.15);box-shadow:0 0 30px rgba(120,80,255,.45);transform:scale(1.04)}
+    .badge{display:inline-block;font-family:'Orbitron',sans-serif;font-size:.6rem;letter-spacing:3px;padding:5px 16px;border-radius:20px;background:rgba(120,80,255,.12);border:1px solid rgba(120,80,255,.25);color:#b090e0;margin-bottom:1.4rem}
 
-    .btn {
-      font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: .85rem;
-      padding: 14px 42px; border: 2px solid #7850ff; background: transparent;
-      color: #c084fc; border-radius: 50px; cursor: pointer; letter-spacing: 2px;
-      transition: all .35s; position: relative;
-    }
-    .btn:hover { background: rgba(120,80,255,.15); box-shadow: 0 0 30px rgba(120,80,255,.45); transform: scale(1.04); }
-    .btn.sm { font-size: .7rem; padding: 10px 28px; }
+    /* card */
+    .card{background:rgba(16,12,35,.75);backdrop-filter:blur(8px);border:1px solid rgba(120,80,255,.18);border-radius:18px;padding:2rem;width:100%;max-width:700px;margin-bottom:1.4rem;transition:border-color .4s,box-shadow .4s}
+    .card:hover{border-color:rgba(120,80,255,.35)}
+    .card h2{font-family:'Orbitron',sans-serif;font-size:1rem;color:#c084fc;margin-bottom:.5rem;display:flex;align-items:center;gap:8px;justify-content:center}
+    .card p{font-size:.84rem;line-height:1.65;opacity:.7;margin-bottom:1.2rem}
+    .card .hint-btn{font-size:.72rem;color:#8060b0;cursor:pointer;margin-bottom:.8rem;transition:color .3s;display:inline-block}
+    .card .hint-btn:hover{color:#c084fc}
+    .card .hint-box{display:none;font-size:.78rem;color:#a080d0;background:rgba(120,80,255,.06);padding:10px 14px;border-radius:8px;border-left:3px solid rgba(120,80,255,.25);margin-bottom:1rem}
+    .card .hint-box.show{display:block;animation:fadeUp .35s ease}
+    .card.solved{border-color:rgba(50,220,120,.4);box-shadow:0 0 25px rgba(50,220,120,.12)}
+    .card .solved-tag{display:none;font-family:'Orbitron',sans-serif;font-size:.65rem;letter-spacing:2px;color:#32dc78;margin-top:.8rem;text-align:center}
+    .card.solved .solved-tag{display:block;animation:fadeUp .5s ease}
 
-    /* ===== BADGE ===== */
-    .badge {
-      display: inline-block; font-family: 'Orbitron', sans-serif; font-size: .6rem;
-      letter-spacing: 3px; padding: 5px 16px; border-radius: 20px;
-      background: rgba(120,80,255,.12); border: 1px solid rgba(120,80,255,.25);
-      color: #b090e0; margin-bottom: 1.4rem;
-    }
+    /* ===================== PUZZLE 1: MAZE ===================== */
+    .maze-wrapper{position:relative;display:inline-block;margin:0 auto 1rem;touch-action:none}
+    .maze-wrapper canvas{border-radius:12px;border:2px solid rgba(120,80,255,.2);display:block}
+    .maze-info{font-size:.76rem;color:#8060b0;margin-bottom:.8rem;text-align:center;line-height:1.6}
+    .maze-info strong{color:#c084fc}
+    .maze-timer{font-family:'Orbitron',sans-serif;font-size:.9rem;color:#c084fc;margin-bottom:.6rem;text-align:center;letter-spacing:2px}
 
-    /* ===== PUZZLE CARD ===== */
-    .card {
-      background: rgba(16,12,35,.75); backdrop-filter: blur(8px);
-      border: 1px solid rgba(120,80,255,.18); border-radius: 18px;
-      padding: 2rem; width: 100%; max-width: 680px; margin-bottom: 1.4rem;
-      transition: border-color .3s, box-shadow .3s;
-    }
-    .card:hover { border-color: rgba(120,80,255,.35); }
-    .card h2 { font-family: 'Orbitron', sans-serif; font-size: 1rem; color: #c084fc; margin-bottom: .5rem; display: flex; align-items: center; gap: 8px; justify-content: center; }
-    .card p { font-size: .84rem; line-height: 1.65; opacity: .7; margin-bottom: 1.2rem; }
-    .card .hint-btn {
-      font-size: .72rem; color: #8060b0; cursor: pointer; margin-bottom: .8rem;
-      transition: color .3s; display: inline-block;
-    }
-    .card .hint-btn:hover { color: #c084fc; }
-    .card .hint-box {
-      display: none; font-size: .78rem; color: #a080d0; background: rgba(120,80,255,.06);
-      padding: 10px 14px; border-radius: 8px; border-left: 3px solid rgba(120,80,255,.25); margin-bottom: 1rem;
-    }
-    .card .hint-box.show { display: block; animation: fadeUp .35s ease; }
-    .card.solved { border-color: rgba(50,220,120,.4); box-shadow: 0 0 20px rgba(50,220,120,.1); }
+    /* ===================== PUZZLE 2: LIGHTS OUT ===================== */
+    .lights-grid{display:grid;gap:6px;margin:0 auto 1rem}
+    .lights-cell{aspect-ratio:1;border-radius:12px;cursor:pointer;transition:all .2s;border:2px solid transparent;position:relative;display:flex;align-items:center;justify-content:center}
+    .lights-cell.on{background:rgba(120,80,255,.55);border-color:rgba(120,80,255,.6);box-shadow:0 0 18px rgba(120,80,255,.4)}
+    .lights-cell.off{background:rgba(20,15,35,.6);border-color:rgba(60,40,100,.2)}
+    .lights-cell:hover{transform:scale(1.08)}
+    .lights-cell:active{transform:scale(.95)}
+    .lights-cell.pop{animation:lpop .3s ease}
+    @keyframes lpop{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
+    .lights-moves{font-size:.78rem;color:#8060b0;margin-bottom:.8rem;text-align:center}
+    .lights-moves span{color:#c084fc;font-family:'Orbitron',sans-serif}
 
-    /* PUZZLE 1 — PATTERN SEQUENCE (visual grid) */
-    .seq-row { display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap; margin-bottom: 1.2rem; }
-    .seq-cell {
-      width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
-      font-size: 1.6rem; border: 2px solid rgba(120,80,255,.2); background: rgba(10,8,25,.6);
-    }
-    .seq-cell.q { border-style: dashed; border-color: rgba(200,140,255,.4); font-size: 1.4rem; color: #c084fc; animation: pulse 2s ease-in-out infinite; }
-    .seq-options { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: .5rem; }
-    .seq-opt {
-      width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
-      font-size: 1.6rem; cursor: pointer; border: 2px solid rgba(120,80,255,.2); background: rgba(20,15,40,.5);
-      transition: all .25s;
-    }
-    .seq-opt:hover { border-color: #7850ff; transform: scale(1.1); box-shadow: 0 0 15px rgba(120,80,255,.3); }
-    .seq-opt.wrong { border-color: #ff4060; animation: shake .4s ease; }
-    .seq-opt.right { border-color: #32dc78; background: rgba(50,220,120,.1); pointer-events: none; }
-    @keyframes shake { 0%{transform:translateX(0)}25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}100%{transform:translateX(0)} }
+    /* ===================== FINAL PORTAL ===================== */
+    .mega-ring{width:280px;height:280px;border-radius:50%;cursor:pointer;border:3px solid rgba(120,80,255,.5);box-shadow:0 0 70px rgba(120,80,255,.45),inset 0 0 70px rgba(120,80,255,.3);display:flex;align-items:center;justify-content:center;animation:pulse 2s ease-in-out infinite;margin-bottom:2rem;position:relative;overflow:hidden}
+    .mega-ring::before{content:'';position:absolute;width:160%;height:160%;background:conic-gradient(rgba(120,80,255,.25),transparent,rgba(200,130,255,.25),transparent,rgba(120,80,255,.25));animation:spin 5s linear infinite}
+    .mega-ring .inner{position:relative;z-index:1;font-size:4rem;animation:bob 2.5s ease-in-out infinite}
+    .mega-ring:hover{box-shadow:0 0 100px rgba(120,80,255,.6),inset 0 0 90px rgba(120,80,255,.4)}
+    .portal-hint{font-size:.76rem;opacity:.4;animation:bob 4s ease-in-out infinite}
 
-    /* PUZZLE 2 — MEMORY MATCH */
-    .mem-grid {
-      display: grid; grid-template-columns: repeat(4,1fr); gap: 10px;
-      max-width: 340px; margin: 0 auto 1rem;
-    }
-    .mem-card {
-      aspect-ratio: 1; border-radius: 12px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.8rem; border: 2px solid rgba(120,80,255,.2);
-      background: rgba(20,15,40,.6); transition: all .3s; position: relative;
-    }
-    .mem-card .face { opacity: 0; transition: opacity .3s; }
-    .mem-card .back { position: absolute; font-size: 1.3rem; color: rgba(120,80,255,.4); transition: opacity .3s; }
-    .mem-card.flip .face { opacity: 1; }
-    .mem-card.flip .back { opacity: 0; }
-    .mem-card.flip { border-color: rgba(120,80,255,.5); background: rgba(30,20,60,.7); }
-    .mem-card.matched { border-color: rgba(50,220,120,.4); background: rgba(50,220,120,.06); pointer-events: none; }
-    .mem-card:hover:not(.flip):not(.matched) { border-color: rgba(120,80,255,.4); transform: scale(1.05); }
+    /* ===================== CELEBRATION ===================== */
+    .cele-overlay{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;flex-direction:column}
+    .cele-overlay.active{display:flex;animation:celeIn 1s ease}
+    @keyframes celeIn{from{opacity:0}to{opacity:1}}
+    .cele-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at center,rgba(110,30,200,.95),rgba(15,4,50,.98) 65%,rgba(4,0,18,1))}
+    .cele-content{position:relative;z-index:2;text-align:center;padding:2rem}
+    .cele-surprise{font-family:'Orbitron',sans-serif;font-size:clamp(.9rem,2.5vw,1.2rem);letter-spacing:8px;color:#c084fc;margin-bottom:1rem;opacity:0;animation:revTxt 1s ease .4s forwards}
+    @keyframes revTxt{from{opacity:0;transform:translateY(18px);letter-spacing:18px}to{opacity:1;transform:translateY(0);letter-spacing:8px}}
+    .cele-cake{font-size:clamp(4rem,10vw,7rem);animation:bob 2s ease-in-out infinite;margin-bottom:1rem}
+    .cele-msg{font-family:'Pacifico',cursive;font-size:clamp(2rem,7vw,4.8rem);line-height:1.3;background:linear-gradient(135deg,#ff6bca,#ffbe30,#5bffb0,#50aaff,#d080ff);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:rainbow 4s ease infinite,popIn 1s ease .9s both;filter:drop-shadow(0 0 30px rgba(255,100,200,.35));margin-bottom:1.5rem}
+    @keyframes rainbow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+    @keyframes popIn{from{opacity:0;transform:scale(.4) rotate(-5deg)}60%{transform:scale(1.1) rotate(2deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+    .cele-note{font-family:'Space Mono',monospace;font-size:clamp(.78rem,1.6vw,.95rem);color:rgba(255,255,255,.65);max-width:480px;margin:0 auto;line-height:1.8;opacity:0;animation:fadeUp .8s ease 1.8s forwards}
+    #confetti{position:fixed;inset:0;z-index:9998;pointer-events:none}
+    .balloon{position:fixed;bottom:-100px;font-size:2.8rem;z-index:10000;pointer-events:none;animation:rise linear forwards}
+    @keyframes rise{to{bottom:110vh}}
+    .sparkle{position:fixed;width:5px;height:5px;border-radius:50%;pointer-events:none;z-index:10001;animation:sparkOut 1s ease forwards}
+    @keyframes sparkOut{to{opacity:0;transform:scale(0) translateY(-30px)}}
 
-    /* PUZZLE 3 — SPOT DIFFERENCE (image grid) */
-    .spot-wrap { position: relative; display: inline-block; margin-bottom: 1rem; }
-    .spot-grid {
-      display: grid; grid-template-columns: repeat(5,1fr); gap: 6px;
-      max-width: 320px; margin: 0 auto;
-    }
-    .spot-cell {
-      aspect-ratio: 1; border-radius: 10px; display: flex; align-items: center; justify-content: center;
-      font-size: 1.6rem; background: rgba(20,15,40,.5); border: 2px solid rgba(120,80,255,.12);
-      cursor: pointer; transition: all .3s;
-    }
-    .spot-cell:hover { border-color: rgba(120,80,255,.35); transform: scale(1.08); }
-    .spot-cell.found { border-color: rgba(50,220,120,.5); background: rgba(50,220,120,.08); box-shadow: 0 0 12px rgba(50,220,120,.2); pointer-events: none; }
-    .spot-cell.wrong-click { border-color: #ff4060; animation: shake .35s ease; }
-    .spot-counter { font-size: .8rem; color: #8060b0; margin-bottom: 1rem; }
-
-    /* PUZZLE 4 — JIGSAW / TILE SLIDE */
-    .slide-grid {
-      display: grid; grid-template-columns: repeat(3,1fr); gap: 6px;
-      max-width: 260px; margin: 0 auto 1rem;
-    }
-    .slide-cell {
-      aspect-ratio: 1; border-radius: 10px; display: flex; align-items: center; justify-content: center;
-      font-size: 1.6rem; background: rgba(20,15,40,.6); border: 2px solid rgba(120,80,255,.18);
-      cursor: pointer; transition: all .2s; font-family: 'Orbitron', sans-serif; font-weight: 700;
-    }
-    .slide-cell:hover:not(.empty) { border-color: rgba(120,80,255,.45); transform: scale(1.06); }
-    .slide-cell.empty { background: transparent; border: 2px dashed rgba(120,80,255,.1); cursor: default; }
-    .slide-cell.glow { color: #c084fc; text-shadow: 0 0 12px rgba(120,80,255,.5); }
-    .move-counter { font-size: .78rem; color: #8060b0; margin-bottom: .8rem; }
-
-    /* ===== FINAL PORTAL ===== */
-    .mega-ring {
-      width: 280px; height: 280px; border-radius: 50%; cursor: pointer;
-      border: 3px solid rgba(120,80,255,.5);
-      box-shadow: 0 0 70px rgba(120,80,255,.45), inset 0 0 70px rgba(120,80,255,.3);
-      display: flex; align-items: center; justify-content: center;
-      animation: pulse 2s ease-in-out infinite; margin-bottom: 2rem; position: relative; overflow: hidden;
-    }
-    .mega-ring::before {
-      content: ''; position: absolute; width: 160%; height: 160%;
-      background: conic-gradient(rgba(120,80,255,.25),transparent,rgba(200,130,255,.25),transparent,rgba(120,80,255,.25));
-      animation: spin 5s linear infinite;
-    }
-    .mega-ring .inner { position: relative; z-index: 1; font-size: 4rem; animation: bob 2.5s ease-in-out infinite; }
-    .mega-ring:hover { box-shadow: 0 0 100px rgba(120,80,255,.6), inset 0 0 90px rgba(120,80,255,.4); }
-    .portal-hint { font-size: .76rem; opacity: .4; animation: bob 4s ease-in-out infinite; }
-
-    /* ===== CELEBRATION ===== */
-    .cele-overlay {
-      position: fixed; inset: 0; z-index: 9999;
-      display: none; align-items: center; justify-content: center; flex-direction: column;
-    }
-    .cele-overlay.active { display: flex; animation: celeIn 1s ease; }
-    @keyframes celeIn { from { opacity: 0; } to { opacity: 1; } }
-    .cele-bg {
-      position: absolute; inset: 0; z-index: 0;
-      background: radial-gradient(ellipse at center, rgba(110,30,200,.95), rgba(15,4,50,.98) 65%, rgba(4,0,18,1));
-    }
-    .cele-content { position: relative; z-index: 2; text-align: center; padding: 2rem; }
-    .cele-surprise {
-      font-family: 'Orbitron', sans-serif; font-size: clamp(.9rem,2.5vw,1.2rem);
-      letter-spacing: 8px; color: #c084fc; margin-bottom: 1rem;
-      opacity: 0; animation: revealTxt 1s ease .4s forwards;
-    }
-    @keyframes revealTxt { from { opacity:0; transform:translateY(18px); letter-spacing:18px; } to { opacity:1; transform:translateY(0); letter-spacing:8px; } }
-    .cele-cake { font-size: clamp(4rem,10vw,7rem); animation: bob 2s ease-in-out infinite; margin-bottom: 1rem; }
-    .cele-msg {
-      font-family: 'Pacifico', cursive; font-size: clamp(2rem,7vw,4.8rem); line-height: 1.3;
-      background: linear-gradient(135deg,#ff6bca,#ffbe30,#5bffb0,#50aaff,#d080ff);
-      background-size: 300% 300%;
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      animation: rainbow 4s ease infinite, popIn 1s ease .9s both;
-      filter: drop-shadow(0 0 30px rgba(255,100,200,.35)); margin-bottom: 1.5rem;
-    }
-    @keyframes rainbow { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
-    @keyframes popIn { from{opacity:0;transform:scale(.4) rotate(-5deg)} 60%{transform:scale(1.1) rotate(2deg)} to{opacity:1;transform:scale(1) rotate(0)} }
-    .cele-note {
-      font-family: 'Space Mono', monospace; font-size: clamp(.78rem,1.6vw,.95rem);
-      color: rgba(255,255,255,.65); max-width: 480px; margin: 0 auto; line-height: 1.8;
-      opacity: 0; animation: fadeUp .8s ease 1.8s forwards;
-    }
-    #confetti { position: fixed; inset: 0; z-index: 9998; pointer-events: none; }
-    .balloon {
-      position: fixed; bottom: -100px; font-size: 2.8rem; z-index: 10000;
-      pointer-events: none; animation: rise linear forwards;
-    }
-    @keyframes rise { to { bottom: 110vh; } }
-    .sparkle {
-      position: fixed; width: 5px; height: 5px; border-radius: 50%;
-      pointer-events: none; z-index: 10001; animation: sparkOut 1s ease forwards;
-    }
-    @keyframes sparkOut { to { opacity: 0; transform: scale(0) translateY(-30px); } }
-
-    /* ===== RESPONSIVE ===== */
-    @media(max-width:600px) {
-      .ring { width: 170px; height: 170px; }
-      .ring .ico { font-size: 3.2rem; }
-      .mega-ring { width: 210px; height: 210px; }
-      .mem-grid { grid-template-columns: repeat(4,1fr); max-width: 280px; }
-      .spot-grid { max-width: 260px; }
-      .slide-grid { max-width: 210px; }
-      .seq-cell, .seq-opt { width: 46px; height: 46px; font-size: 1.3rem; }
+    @media(max-width:600px){
+      .ring{width:170px;height:170px} .ring .ico{font-size:3.2rem}
+      .mega-ring{width:210px;height:210px}
+      .card{padding:1.4rem}
     }
   </style>
 </head>
@@ -259,68 +111,48 @@
 
 <canvas id="particles"></canvas>
 
-<!-- TOP BAR -->
 <div class="topbar" id="topbar">
   <span class="lbl">MISSION</span>
   <div class="bar"><div class="fill" id="barFill"></div></div>
-  <span class="num" id="barNum">0 / 4</span>
+  <span class="num" id="barNum">0 / 2</span>
 </div>
 
 <!-- ========== INTRO ========== -->
 <section class="screen active" id="scrIntro">
   <div class="ring"><span class="ico">🔮</span></div>
   <h1 class="title">THE PORTAL AWAITS</h1>
-  <p class="sub">A classified signal has been detected from beyond the void. Four encrypted fragments must be recovered to unlock the gateway. Only the sharpest minds will make it through.</p>
+  <p class="sub">A classified signal has been intercepted from beyond the void. Two encrypted fragments must be recovered to unlock the gateway. Only the sharpest minds survive.</p>
   <button class="btn" id="btnStart">ENTER THE PORTAL</button>
 </section>
 
-<!-- ========== PUZZLE 1 — PATTERN ========== -->
+<!-- ========== PUZZLE 1 — MAZE ========== -->
 <section class="screen" id="scrP1">
-  <span class="badge">🧩 Fragment 1 of 4</span>
+  <span class="badge">🌀 Fragment 1 of 2</span>
   <div class="card" id="cardP1">
-    <h2>🔢 Pattern Sequence</h2>
-    <p>Each row follows a pattern. Find what comes next.</p>
+    <h2>🌀 The Void Maze</h2>
+    <p>Navigate the orb through the labyrinth to reach the exit portal. Use <strong>arrow keys</strong>, <strong>WASD</strong>, or <strong>swipe</strong> on mobile. The void shifts — stay sharp.</p>
     <div class="hint-btn" onclick="toggleHint('h1')">💡 Hint</div>
-    <div class="hint-box" id="h1">Look at how each shape transforms row by row…</div>
-    <div id="seqArea"></div>
+    <div class="hint-box" id="h1">Hug the right wall — it usually finds a way out. Don't rush.</div>
+    <div class="maze-timer" id="mazeTimer">00:00</div>
+    <div class="maze-info">🟣 You &nbsp; → &nbsp; 🟢 Exit</div>
+    <div class="maze-wrapper" id="mazeWrapper">
+      <canvas id="mazeCanvas"></canvas>
+    </div>
+    <div class="solved-tag">✓ FRAGMENT RECOVERED</div>
   </div>
 </section>
 
-<!-- ========== PUZZLE 2 — MEMORY ========== -->
+<!-- ========== PUZZLE 2 — LIGHTS OUT ========== -->
 <section class="screen" id="scrP2">
-  <span class="badge">🧠 Fragment 2 of 4</span>
+  <span class="badge">💡 Fragment 2 of 2</span>
   <div class="card" id="cardP2">
-    <h2>🃏 Memory Matrix</h2>
-    <p>Match all the hidden pairs to decrypt the fragment.</p>
+    <h2>💡 Lights Out Protocol</h2>
+    <p>All lights must be turned <strong>OFF</strong> to decrypt the final fragment. But here's the catch — clicking a light also toggles its <strong>neighbors</strong> (up, down, left, right). Think several moves ahead.</p>
     <div class="hint-btn" onclick="toggleHint('h2')">💡 Hint</div>
-    <div class="hint-box" id="h2">Remember positions — focus on two at a time.</div>
-    <div class="mem-grid" id="memGrid"></div>
-  </div>
-</section>
-
-<!-- ========== PUZZLE 3 — SPOT THE ODD ========== -->
-<section class="screen" id="scrP3">
-  <span class="badge">🔍 Fragment 3 of 4</span>
-  <div class="card" id="cardP3">
-    <h2>👁️ Spot the Intruders</h2>
-    <p>Most symbols are the same — but <strong>3 imposters</strong> are hiding. Find them all.</p>
-    <div class="hint-btn" onclick="toggleHint('h3')">💡 Hint</div>
-    <div class="hint-box" id="h3">Look very carefully — the differences are subtle but they're there.</div>
-    <p class="spot-counter">Found: <span id="spotCount">0</span> / 3</p>
-    <div class="spot-grid" id="spotGrid"></div>
-  </div>
-</section>
-
-<!-- ========== PUZZLE 4 — SLIDE ========== -->
-<section class="screen" id="scrP4">
-  <span class="badge">🧊 Fragment 4 of 4</span>
-  <div class="card" id="cardP4">
-    <h2>🔀 Tile Slider</h2>
-    <p>Slide the tiles to put the numbers in order (1–8). Click a tile next to the gap to move it.</p>
-    <div class="hint-btn" onclick="toggleHint('h4')">💡 Hint</div>
-    <div class="hint-box" id="h4">Work row by row — get the top row right first.</div>
-    <p class="move-counter">Moves: <span id="moveCount">0</span></p>
-    <div class="slide-grid" id="slideGrid"></div>
+    <div class="hint-box" id="h2">Try working row by row from top to bottom. Clicking the bottom row can fix the top without ruining what you've solved — a technique called "chasing."</div>
+    <div class="lights-moves">Moves: <span id="lightsCount">0</span></div>
+    <div class="lights-grid" id="lightsGrid"></div>
+    <div class="solved-tag">✓ FRAGMENT RECOVERED</div>
   </div>
 </section>
 
@@ -328,7 +160,7 @@
 <section class="screen" id="scrFinal">
   <span class="badge">⚡ ALL FRAGMENTS RECOVERED</span>
   <h1 class="title" style="font-size:clamp(1.2rem,3.5vw,2rem)">The Gateway Is Open</h1>
-  <p class="sub">All four fragments reassembled. The portal hums with raw energy. Whatever is on the other side�� there's no going back.</p>
+  <p class="sub">Both fragments reassembled. The portal hums with raw energy. Whatever is on the other side… there's no going back.</p>
   <div class="mega-ring" id="megaPortal">
     <span class="inner">🌀</span>
   </div>
@@ -348,248 +180,256 @@
 </div>
 
 <script>
-/* ============================================================
+/* =============================================================
    PARTICLES
-   ============================================================ */
-const pc = document.getElementById('particles'), px = pc.getContext('2d');
-let pts = [];
-function resizeP(){ pc.width=innerWidth; pc.height=innerHeight; }
-resizeP(); addEventListener('resize', resizeP);
-class Pt {
-  constructor(){ this.reset(); }
-  reset(){
-    this.x=Math.random()*pc.width; this.y=Math.random()*pc.height;
-    this.r=Math.random()*2+.4; this.dx=(Math.random()-.5)*.35; this.dy=(Math.random()-.5)*.35;
-    this.o=Math.random()*.45+.08; this.h=255+Math.random()*40;
-  }
-  update(){ this.x+=this.dx; this.y+=this.dy; if(this.x<0||this.x>pc.width||this.y<0||this.y>pc.height) this.reset(); }
-  draw(){ px.beginPath(); px.arc(this.x,this.y,this.r,0,Math.PI*2); px.fillStyle=`hsla(${this.h},65%,68%,${this.o})`; px.fill(); }
-}
-for(let i=0;i<90;i++) pts.push(new Pt());
-(function anim(){ px.clearRect(0,0,pc.width,pc.height); pts.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(anim); })();
+   ============================================================= */
+const pc=document.getElementById('particles'),px=pc.getContext('2d');let pts=[];
+function rP(){pc.width=innerWidth;pc.height=innerHeight}rP();addEventListener('resize',rP);
+class Pt{constructor(){this.reset()}reset(){this.x=Math.random()*pc.width;this.y=Math.random()*pc.height;this.r=Math.random()*2+.4;this.dx=(Math.random()-.5)*.35;this.dy=(Math.random()-.5)*.35;this.o=Math.random()*.4+.08;this.h=255+Math.random()*40}update(){this.x+=this.dx;this.y+=this.dy;if(this.x<0||this.x>pc.width||this.y<0||this.y>pc.height)this.reset()}draw(){px.beginPath();px.arc(this.x,this.y,this.r,0,Math.PI*2);px.fillStyle=`hsla(${this.h},65%,68%,${this.o})`;px.fill()}}
+for(let i=0;i<80;i++)pts.push(new Pt());
+(function a(){px.clearRect(0,0,pc.width,pc.height);pts.forEach(p=>{p.update();p.draw()});requestAnimationFrame(a)})();
 
-/* ============================================================
-   NAVIGATION HELPERS
-   ============================================================ */
-const screens = ['scrIntro','scrP1','scrP2','scrP3','scrP4','scrFinal'];
-let curScreen = 0;
-function go(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  scrollTo({top:0,behavior:'smooth'});
-}
-document.getElementById('btnStart').onclick = ()=>{
-  go('scrP1'); document.getElementById('topbar').classList.add('show');
-};
+/* =============================================================
+   NAV
+   ============================================================= */
+function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');scrollTo({top:0,behavior:'smooth'})}
+document.getElementById('btnStart').onclick=()=>{go('scrP1');document.getElementById('topbar').classList.add('show');startMazeTimer()};
+function toggleHint(id){document.getElementById(id).classList.toggle('show')}
 
-let solved = [false,false,false,false];
+let solved=[false,false];
 function markDone(n){
-  solved[n] = true;
-  const cnt = solved.filter(Boolean).length;
-  document.getElementById('barFill').style.width = (cnt/4*100)+'%';
-  document.getElementById('barNum').textContent = cnt+' / 4';
+  if(solved[n])return;solved[n]=true;
+  const cnt=solved.filter(Boolean).length;
+  document.getElementById('barFill').style.width=(cnt/2*100)+'%';
+  document.getElementById('barNum').textContent=cnt+' / 2';
   document.getElementById('cardP'+(n+1)).classList.add('solved');
-  // auto-advance after short delay
   setTimeout(()=>{
-    if(cnt<4){
-      // go to next unsolved
-      for(let i=0;i<4;i++) if(!solved[i]){ go('scrP'+(i+1)); return; }
-    } else {
-      document.getElementById('topbar').classList.remove('show');
-      go('scrFinal');
-    }
-  }, 900);
+    if(cnt<2){for(let i=0;i<2;i++)if(!solved[i]){go('scrP'+(i+1));return}}
+    else{document.getElementById('topbar').classList.remove('show');go('scrFinal')}
+  },1100);
 }
 
-function toggleHint(id){ document.getElementById(id).classList.toggle('show'); }
+/* =============================================================
+   PUZZLE 1 — MAZE (Recursive Backtracker)
+   ============================================================= */
+;(function(){
+  const cvs=document.getElementById('mazeCanvas');
+  const ctx=cvs.getContext('2d');
+  const COLS=14, ROWS=10, CELL=30, WALL=4;
+  const W=COLS*CELL, H=ROWS*CELL;
+  cvs.width=W; cvs.height=H;
 
-/* ============================================================
-   PUZZLE 1 — VISUAL PATTERN SEQUENCE
-   ============================================================ */
-(function(){
-  const area = document.getElementById('seqArea');
-  // 3 rounds of "what comes next"
-  const rounds = [
-    { seq: ['🔴','🔵','🔴','🔵','🔴'], answer: '🔵', opts: ['🔵','🟢','🔴','🟡'] },
-    { seq: ['🌑','🌓','🌕','🌑','🌓'], answer: '🌕', opts: ['🌑','🌕','🌗','🌓'] },
-    { seq: ['⬛','⬛','⬜','⬛','⬛'], answer: '⬜', opts: ['⬛','⬜','🟫','🟪'] },
-  ];
-  let rIdx = 0;
-
-  function renderRound(){
-    area.innerHTML = '';
-    if(rIdx >= rounds.length){ markDone(0); return; }
-    const r = rounds[rIdx];
-    // sequence row
-    const row = document.createElement('div'); row.className='seq-row';
-    r.seq.forEach(s=>{ const c=document.createElement('div'); c.className='seq-cell'; c.textContent=s; row.appendChild(c); });
-    const q = document.createElement('div'); q.className='seq-cell q'; q.textContent='?'; row.appendChild(q);
-    area.appendChild(row);
-    // options
-    const opts = document.createElement('div'); opts.className='seq-options';
-    // shuffle options
-    const shuffled = [...r.opts].sort(()=>Math.random()-.5);
-    shuffled.forEach(o=>{
-      const b = document.createElement('div'); b.className='seq-opt'; b.textContent=o;
-      b.onclick = ()=>{
-        if(o===r.answer){
-          b.classList.add('right'); q.textContent=o; q.classList.remove('q');
-          q.style.borderStyle='solid'; q.style.borderColor='rgba(50,220,120,.5)';
-          rIdx++;
-          setTimeout(renderRound, 600);
-        } else { b.classList.add('wrong'); setTimeout(()=>b.classList.remove('wrong'),400); }
-      };
-      opts.appendChild(b);
-    });
-    area.appendChild(opts);
+  // responsive sizing
+  const wrapper=document.getElementById('mazeWrapper');
+  function fitMaze(){
+    const maxW=Math.min(innerWidth-48,700);
+    if(W>maxW){const s=maxW/W;cvs.style.width=maxW+'px';cvs.style.height=(H*s)+'px'}
+    else{cvs.style.width=W+'px';cvs.style.height=H+'px'}
   }
-  renderRound();
-})();
+  fitMaze(); addEventListener('resize',fitMaze);
 
-/* ============================================================
-   PUZZLE 2 — MEMORY MATCH
-   ============================================================ */
-(function(){
-  const grid = document.getElementById('memGrid');
-  const symbols = ['🔮','⚡','🌀','💎','🗝️','🛸','🧿','🪐'];
-  const cards = [...symbols,...symbols].sort(()=>Math.random()-.5);
-  let flipped=[], matchCount=0, busy=false;
+  // grid
+  let grid=[], stack=[];
+  class Cell{
+    constructor(c,r){this.c=c;this.r=r;this.walls={t:true,r:true,b:true,l:true};this.visited=false}
+    neighbors(){
+      const n=[];
+      if(this.r>0&&!grid[idx(this.c,this.r-1)].visited)n.push(grid[idx(this.c,this.r-1)]);
+      if(this.c<COLS-1&&!grid[idx(this.c+1,this.r)].visited)n.push(grid[idx(this.c+1,this.r)]);
+      if(this.r<ROWS-1&&!grid[idx(this.c,this.r+1)].visited)n.push(grid[idx(this.c,this.r+1)]);
+      if(this.c>0&&!grid[idx(this.c-1,this.r)].visited)n.push(grid[idx(this.c-1,this.r)]);
+      return n;
+    }
+  }
+  function idx(c,r){return r*COLS+c}
+  function removeWalls(a,b){
+    const dc=a.c-b.c, dr=a.r-b.r;
+    if(dc===1){a.walls.l=false;b.walls.r=false}
+    if(dc===-1){a.walls.r=false;b.walls.l=false}
+    if(dr===1){a.walls.t=false;b.walls.b=false}
+    if(dr===-1){a.walls.b=false;b.walls.t=false}
+  }
 
-  cards.forEach((sym,i)=>{
-    const c = document.createElement('div'); c.className='mem-card'; c.dataset.idx=i; c.dataset.sym=sym;
-    c.innerHTML = `<span class="face">${sym}</span><span class="back">?</span>`;
-    c.onclick = ()=>{
-      if(busy||c.classList.contains('flip')||c.classList.contains('matched')) return;
-      c.classList.add('flip'); flipped.push(c);
-      if(flipped.length===2){
-        busy=true;
-        const [a,b]=flipped;
-        if(a.dataset.sym===b.dataset.sym){
-          setTimeout(()=>{ a.classList.add('matched'); b.classList.add('matched'); flipped=[]; busy=false; matchCount++;
-            if(matchCount===8) markDone(1);
-          },400);
-        } else {
-          setTimeout(()=>{ a.classList.remove('flip'); b.classList.remove('flip'); flipped=[]; busy=false; },700);
-        }
-      }
-    };
-    grid.appendChild(c);
+  function generate(){
+    grid=[];stack=[];
+    for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)grid.push(new Cell(c,r));
+    let cur=grid[0];cur.visited=true;stack.push(cur);
+    while(stack.length){
+      const nb=cur.neighbors();
+      if(nb.length){
+        const next=nb[Math.floor(Math.random()*nb.length)];
+        removeWalls(cur,next);next.visited=true;stack.push(cur);cur=next;
+      }else{cur=stack.pop()}
+    }
+  }
+  generate();
+
+  // player
+  let pCol=0,pRow=0;
+  const exitCol=COLS-1,exitRow=ROWS-1;
+  let mazeWon=false;
+
+  // timer
+  let timerStart,timerRAF;
+  function startMazeTimer(){timerStart=Date.now();tickTimer()}
+  function tickTimer(){
+    if(mazeWon)return;
+    const s=Math.floor((Date.now()-timerStart)/1000);
+    const m=String(Math.floor(s/60)).padStart(2,'0');
+    const sec=String(s%60).padStart(2,'0');
+    document.getElementById('mazeTimer').textContent=m+':'+sec;
+    timerRAF=requestAnimationFrame(tickTimer);
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    // BG
+    ctx.fillStyle='#0c0a18';ctx.fillRect(0,0,W,H);
+    // cells & walls
+    grid.forEach(cell=>{
+      const x=cell.c*CELL,y=cell.r*CELL;
+      ctx.strokeStyle='rgba(120,80,255,.35)';ctx.lineWidth=WALL;ctx.lineCap='round';
+      if(cell.walls.t){ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+CELL,y);ctx.stroke()}
+      if(cell.walls.r){ctx.beginPath();ctx.moveTo(x+CELL,y);ctx.lineTo(x+CELL,y+CELL);ctx.stroke()}
+      if(cell.walls.b){ctx.beginPath();ctx.moveTo(x+CELL,y+CELL);ctx.lineTo(x,y+CELL);ctx.stroke()}
+      if(cell.walls.l){ctx.beginPath();ctx.moveTo(x,y+CELL);ctx.lineTo(x,y);ctx.stroke()}
+    });
+    // exit glow
+    const ex=exitCol*CELL+CELL/2,ey=exitRow*CELL+CELL/2;
+    const grd=ctx.createRadialGradient(ex,ey,2,ex,ey,CELL*.7);
+    grd.addColorStop(0,'rgba(50,220,120,.3)');grd.addColorStop(1,'transparent');
+    ctx.fillStyle=grd;ctx.fillRect(exitCol*CELL,exitRow*CELL,CELL,CELL);
+    ctx.fillStyle='#32dc78';ctx.font='16px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('🟢',ex,ey);
+    // player
+    const px2=pCol*CELL+CELL/2,py2=pRow*CELL+CELL/2;
+    const pg=ctx.createRadialGradient(px2,py2,2,px2,py2,CELL*.55);
+    pg.addColorStop(0,'rgba(120,80,255,.35)');pg.addColorStop(1,'transparent');
+    ctx.fillStyle=pg;ctx.fillRect(pCol*CELL,pRow*CELL,CELL,CELL);
+    ctx.fillStyle='#c084fc';ctx.font='16px serif';
+    ctx.fillText('🟣',px2,py2);
+  }
+  draw();
+
+  function tryMove(dc,dr){
+    if(mazeWon)return;
+    const cur=grid[idx(pCol,pRow)];
+    if(dc===0&&dr===-1&&!cur.walls.t){pRow--}
+    else if(dc===1&&dr===0&&!cur.walls.r){pCol++}
+    else if(dc===0&&dr===1&&!cur.walls.b){pRow++}
+    else if(dc===-1&&dr===0&&!cur.walls.l){pCol--}
+    else return;
+    draw();
+    if(pCol===exitCol&&pRow===exitRow){mazeWon=true;cancelAnimationFrame(timerRAF);markDone(0)}
+  }
+
+  // keyboard
+  addEventListener('keydown',e=>{
+    const map={'ArrowUp':[0,-1],'ArrowDown':[0,1],'ArrowLeft':[-1,0],'ArrowRight':[1,0],'w':[0,-1],'s':[0,1],'a':[-1,0],'d':[1,0],'W':[0,-1],'S':[0,1],'A':[-1,0],'D':[1,0]};
+    if(map[e.key]){e.preventDefault();tryMove(...map[e.key])}
+  });
+
+  // swipe
+  let tx,ty;
+  cvs.addEventListener('touchstart',e=>{const t=e.touches[0];tx=t.clientX;ty=t.clientY},{passive:true});
+  cvs.addEventListener('touchend',e=>{
+    const t=e.changedTouches[0];const dx=t.clientX-tx,dy=t.clientY-ty;
+    if(Math.abs(dx)<15&&Math.abs(dy)<15)return;
+    if(Math.abs(dx)>Math.abs(dy)){tryMove(dx>0?1:-1,0)}else{tryMove(0,dy>0?1:-1)}
+  },{passive:true});
+
+  // click-to-move (tap adjacent cell)
+  cvs.addEventListener('click',e=>{
+    const rect=cvs.getBoundingClientRect();
+    const scaleX=W/rect.width,scaleY=H/rect.height;
+    const mx=(e.clientX-rect.left)*scaleX,my=(e.clientY-rect.top)*scaleY;
+    const cc=Math.floor(mx/CELL),cr=Math.floor(my/CELL);
+    const dc=cc-pCol,dr=cr-pRow;
+    if(Math.abs(dc)+Math.abs(dr)===1)tryMove(dc,dr);
   });
 })();
 
-/* ============================================================
-   PUZZLE 3 — SPOT THE ODD ONE OUT
-   ============================================================ */
-(function(){
-  const grid = document.getElementById('spotGrid');
-  const base = '🔷';
-  const odd = '🔹';        // very similar but different
-  const total = 25;         // 5x5
-  const oddCount = 3;
-  let positions = new Set();
-  while(positions.size < oddCount) positions.add(Math.floor(Math.random()*total));
-  let found = 0;
+/* =============================================================
+   PUZZLE 2 — LIGHTS OUT (5×5)
+   ============================================================= */
+;(function(){
+  const SIZE=5;
+  const grid=document.getElementById('lightsGrid');
+  grid.style.gridTemplateColumns=`repeat(${SIZE},clamp(48px,12vw,62px))`;
+  grid.style.maxWidth=(SIZE*68)+'px';
+  let state=[], moves=0;
 
-  for(let i=0;i<total;i++){
-    const c = document.createElement('div'); c.className='spot-cell';
-    const isOdd = positions.has(i);
-    c.textContent = isOdd ? odd : base;
-    c.onclick = ()=>{
-      if(c.classList.contains('found')) return;
-      if(isOdd){
-        c.classList.add('found'); found++;
-        document.getElementById('spotCount').textContent = found;
-        if(found===oddCount) markDone(2);
-      } else {
-        c.classList.add('wrong-click');
-        setTimeout(()=>c.classList.remove('wrong-click'),400);
-      }
-    };
-    grid.appendChild(c);
-  }
-})();
-
-/* ============================================================
-   PUZZLE 4 — SLIDE PUZZLE (simple 3x3, numbers 1-8)
-   ============================================================ */
-(function(){
-  const grid = document.getElementById('slideGrid');
-  const goal = [1,2,3,4,5,6,7,8,0];
-  let tiles, moves=0;
-
-  // generate solvable state
-  function isSolvable(arr){
-    let inv=0;
-    for(let i=0;i<arr.length;i++) for(let j=i+1;j<arr.length;j++) if(arr[i]&&arr[j]&&arr[i]>arr[j]) inv++;
-    return inv%2===0;
-  }
-  function init(){
-    do { tiles=[1,2,3,4,5,6,7,8,0].sort(()=>Math.random()-.5); } while(!isSolvable(tiles)||tiles.join('')===goal.join(''));
-    moves=0; document.getElementById('moveCount').textContent=0;
+  // generate guaranteed-solvable board by starting solved and applying random clicks
+  function initBoard(){
+    state=Array(SIZE*SIZE).fill(false);
+    const clicks=8+Math.floor(Math.random()*5); // 8-12 random clicks
+    for(let i=0;i<clicks;i++){
+      const idx=Math.floor(Math.random()*SIZE*SIZE);
+      applyToggle(idx,true);
+    }
+    // if accidentally solved, add one more
+    if(state.every(v=>!v)){applyToggle(Math.floor(Math.random()*SIZE*SIZE),true)}
+    moves=0;document.getElementById('lightsCount').textContent=0;
     render();
   }
-  function render(){
-    grid.innerHTML='';
-    tiles.forEach((v,i)=>{
-      const c=document.createElement('div');
-      c.className='slide-cell'+(v===0?' empty':' glow');
-      c.textContent=v||'';
-      if(v!==0) c.onclick=()=>tryMove(i);
-      grid.appendChild(c);
-    });
-  }
-  function tryMove(i){
-    const empty=tiles.indexOf(0);
-    const row=Math.floor, r1=row(i/3), r2=row(empty/3), c1=i%3, c2=empty%3;
-    if((Math.abs(r1-r2)+Math.abs(c1-c2))===1){
-      [tiles[i],tiles[empty]]=[tiles[empty],tiles[i]];
-      moves++; document.getElementById('moveCount').textContent=moves;
-      render();
-      if(tiles.join('')===goal.join('')) markDone(3);
+
+  function applyToggle(idx,silent){
+    const r=Math.floor(idx/SIZE),c=idx%SIZE;
+    state[idx]=!state[idx];
+    if(r>0)state[idx-SIZE]=!state[idx-SIZE];
+    if(r<SIZE-1)state[idx+SIZE]=!state[idx+SIZE];
+    if(c>0)state[idx-1]=!state[idx-1];
+    if(c<SIZE-1)state[idx+1]=!state[idx+1];
+    if(!silent){
+      moves++;document.getElementById('lightsCount').textContent=moves;
     }
   }
-  init();
+
+  function render(){
+    grid.innerHTML='';
+    state.forEach((on,i)=>{
+      const cell=document.createElement('div');
+      cell.className='lights-cell '+(on?'on':'off');
+      cell.onclick=()=>{
+        if(solved[1])return;
+        applyToggle(i,false);
+        cell.classList.add('pop');
+        render();
+        if(state.every(v=>!v)){markDone(1)}
+      };
+      grid.appendChild(cell);
+    });
+  }
+  initBoard();
 })();
 
-/* ============================================================
+/* =============================================================
    FINAL PORTAL → CELEBRATION
-   ============================================================ */
-document.getElementById('megaPortal').onclick = celebrate;
+   ============================================================= */
+document.getElementById('megaPortal').onclick=celebrate;
 let celed=false;
 function celebrate(){
-  if(celed) return; celed=true;
-  // flash
+  if(celed)return;celed=true;
   const f=document.createElement('div');
-  f.style.cssText='position:fixed;inset:0;background:#fff;z-index:9997;animation:fOut .8s ease forwards;';
-  document.head.insertAdjacentHTML('beforeend','<style>@keyframes fOut{0%{opacity:1}100%{opacity:0}}</style>');
-  document.body.appendChild(f); setTimeout(()=>f.remove(),900);
-
-  setTimeout(()=>{
-    document.getElementById('celeOverlay').classList.add('active');
-    fireConfetti(); fireBalloons(); fireSparkles();
-  },350);
+  f.style.cssText='position:fixed;inset:0;background:#fff;z-index:9997;animation:fO .8s ease forwards';
+  document.head.insertAdjacentHTML('beforeend','<style>@keyframes fO{0%{opacity:1}100%{opacity:0}}</style>');
+  document.body.appendChild(f);setTimeout(()=>f.remove(),900);
+  setTimeout(()=>{document.getElementById('celeOverlay').classList.add('active');fireConfetti();fireBalloons();fireSparkles()},350);
 }
 
-/* confetti */
 function fireConfetti(){
-  const cv=document.getElementById('confetti'), cx=cv.getContext('2d');
-  cv.width=innerWidth; cv.height=innerHeight;
-  const cols=['#ff6bca','#ffbe30','#5bffb0','#50aaff','#d080ff','#ff5050','#ff9500'];
-  let bits=[];
-  for(let i=0;i<220;i++) bits.push({x:Math.random()*cv.width,y:Math.random()*cv.height-cv.height,w:Math.random()*10+4,h:Math.random()*6+3,c:cols[~~(Math.random()*cols.length)],sy:Math.random()*3+2,sx:(Math.random()-.5)*2,r:Math.random()*360,rs:(Math.random()-.5)*10,o:1});
-  (function draw(){
-    cx.clearRect(0,0,cv.width,cv.height); let alive=false;
-    bits.forEach(b=>{b.y+=b.sy;b.x+=b.sx;b.r+=b.rs;if(b.y>cv.height+20)b.o-=.02;if(b.o<=0)return;alive=true;cx.save();cx.translate(b.x,b.y);cx.rotate(b.r*Math.PI/180);cx.globalAlpha=b.o;cx.fillStyle=b.c;cx.fillRect(-b.w/2,-b.h/2,b.w,b.h);cx.restore();});
-    if(alive) requestAnimationFrame(draw);
-  })();
+  const cv=document.getElementById('confetti'),cx=cv.getContext('2d');cv.width=innerWidth;cv.height=innerHeight;
+  const cols=['#ff6bca','#ffbe30','#5bffb0','#50aaff','#d080ff','#ff5050','#ff9500'];let bits=[];
+  for(let i=0;i<240;i++)bits.push({x:Math.random()*cv.width,y:Math.random()*cv.height-cv.height,w:Math.random()*10+4,h:Math.random()*6+3,c:cols[~~(Math.random()*cols.length)],sy:Math.random()*3+2,sx:(Math.random()-.5)*2,r:Math.random()*360,rs:(Math.random()-.5)*10,o:1});
+  (function d(){cx.clearRect(0,0,cv.width,cv.height);let alive=false;bits.forEach(b=>{b.y+=b.sy;b.x+=b.sx;b.r+=b.rs;if(b.y>cv.height+20)b.o-=.015;if(b.o<=0)return;alive=true;cx.save();cx.translate(b.x,b.y);cx.rotate(b.r*Math.PI/180);cx.globalAlpha=b.o;cx.fillStyle=b.c;cx.fillRect(-b.w/2,-b.h/2,b.w,b.h);cx.restore()});if(alive)requestAnimationFrame(d)})();
 }
 function fireBalloons(){
-  const em=['🎈','🎈','🎈','🎁','⭐','🎈','💜','🎈','🎈','🎈','🎈','🎈','🎈','🎈','🎈'];
-  for(let i=0;i<16;i++) setTimeout(()=>{const b=document.createElement('div');b.className='balloon';b.textContent=em[i%em.length];b.style.left=Math.random()*90+5+'%';b.style.animationDuration=Math.random()*4+5+'s';b.style.fontSize=Math.random()*1.2+2.2+'rem';document.body.appendChild(b);setTimeout(()=>b.remove(),11000);},i*280);
+  const em=['🎈','🎈','🎈','🎁','⭐','🎈','💜','🎈','🎈','🎈','🎈','🎈','🎈','🎈','🎈','🎈'];
+  for(let i=0;i<16;i++)setTimeout(()=>{const b=document.createElement('div');b.className='balloon';b.textContent=em[i%em.length];b.style.left=Math.random()*90+5+'%';b.style.animationDuration=Math.random()*4+5+'s';b.style.fontSize=Math.random()*1.2+2.2+'rem';document.body.appendChild(b);setTimeout(()=>b.remove(),11000)},i*280);
 }
 function fireSparkles(){
   const cols=['#ff6bca','#ffbe30','#5bffb0','#50aaff','#d080ff'];
-  for(let i=0;i<45;i++) setTimeout(()=>{const s=document.createElement('div');s.className='sparkle';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.background=cols[~~(Math.random()*cols.length)];s.style.width=s.style.height=Math.random()*5+3+'px';document.body.appendChild(s);setTimeout(()=>s.remove(),1200);},i*90);
+  for(let i=0;i<50;i++)setTimeout(()=>{const s=document.createElement('div');s.className='sparkle';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.background=cols[~~(Math.random()*cols.length)];s.style.width=s.style.height=Math.random()*5+3+'px';document.body.appendChild(s);setTimeout(()=>s.remove(),1200)},i*80);
 }
 </script>
 </body>
