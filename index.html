@@ -2,108 +2,320 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>🔮 The Portal — Classified Mission</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&family=Pacifico&display=swap" rel="stylesheet" />
   <style>
-    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{font-family:'Space Mono',monospace;background:#07060e;color:#c0c0e0;overflow-x:hidden;min-height:100vh;user-select:none}
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'Space Mono', monospace;
+      background: #07060e;
+      color: #c0c0e0;
+      overflow-x: hidden;
+      min-height: 100dvh;
+      user-select: none;
+      -webkit-user-select: none;
+    }
 
-    /* particles */
-    #particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+    /* ===== PARTICLES ===== */
+    #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 
-    /* progress */
-    .topbar{position:fixed;top:0;left:0;right:0;z-index:500;background:rgba(7,6,14,.94);backdrop-filter:blur(14px);border-bottom:1px solid rgba(120,80,255,.1);padding:10px 24px;display:none;align-items:center;gap:12px}
-    .topbar.show{display:flex}
-    .topbar .lbl{font-family:'Orbitron',sans-serif;font-size:.58rem;letter-spacing:3px;color:#7e60c0}
-    .topbar .bar{flex:1;height:5px;background:rgba(120,80,255,.1);border-radius:4px;overflow:hidden}
-    .topbar .bar .fill{height:100%;width:0%;background:linear-gradient(90deg,#7850ff,#c084fc);border-radius:4px;transition:width .7s ease}
-    .topbar .num{font-family:'Orbitron',sans-serif;font-size:.72rem;color:#c084fc}
+    /* ===== SCREENS ===== */
+    .screen {
+      position: relative; z-index: 2;
+      display: none; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 100dvh;
+      padding: 1.5rem 1.2rem;
+      text-align: center;
+    }
+    .screen.active { display: flex; animation: fadeUp .7s ease; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(25px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-    /* screens */
-    .screen{position:relative;z-index:2;display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;text-align:center}
-    .screen.active{display:flex;animation:fadeUp .7s ease}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+    /* ===== PORTAL RING ===== */
+    .ring {
+      --sz: min(52vw, 200px);
+      width: var(--sz); height: var(--sz);
+      border-radius: 50%;
+      border: 3px solid rgba(120,80,255,.5);
+      box-shadow: 0 0 45px rgba(120,80,255,.4), inset 0 0 45px rgba(120,80,255,.25);
+      display: flex; align-items: center; justify-content: center;
+      animation: pulse 3s ease-in-out infinite;
+      margin-bottom: 1.6rem; position: relative;
+      flex-shrink: 0;
+    }
+    .ring::before {
+      content: ''; position: absolute; inset: -7px; border-radius: 50%;
+      border: 2px dashed rgba(200,140,255,.18);
+      animation: spin 14s linear infinite;
+    }
+    @keyframes pulse {
+      0%,100% { transform: scale(1); box-shadow: 0 0 45px rgba(120,80,255,.4), inset 0 0 45px rgba(120,80,255,.25); }
+      50%     { transform: scale(1.05); box-shadow: 0 0 75px rgba(120,80,255,.55), inset 0 0 65px rgba(120,80,255,.32); }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes bob  { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    .ring .ico { font-size: clamp(2.8rem, 10vw, 4rem); animation: bob 3.5s ease-in-out infinite; }
 
-    /* portal ring */
-    .ring{width:220px;height:220px;border-radius:50%;border:3px solid rgba(120,80,255,.5);box-shadow:0 0 50px rgba(120,80,255,.4),inset 0 0 50px rgba(120,80,255,.25);display:flex;align-items:center;justify-content:center;animation:pulse 3s ease-in-out infinite;margin-bottom:2rem;position:relative}
-    .ring::before{content:'';position:absolute;inset:-8px;border-radius:50%;border:2px dashed rgba(200,140,255,.2);animation:spin 14s linear infinite}
-    @keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 50px rgba(120,80,255,.4),inset 0 0 50px rgba(120,80,255,.25)}50%{transform:scale(1.05);box-shadow:0 0 80px rgba(120,80,255,.6),inset 0 0 70px rgba(120,80,255,.35)}}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-    .ring .ico{font-size:4.5rem;animation:bob 3.5s ease-in-out infinite}
+    h1.title {
+      font-family: 'Orbitron', sans-serif; font-weight: 900;
+      font-size: clamp(1.3rem, 5.5vw, 2.4rem); letter-spacing: 2px;
+      background: linear-gradient(90deg,#7850ff,#c084fc,#7850ff);
+      background-size: 200% 100%;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 5s linear infinite;
+      margin-bottom: .6rem; line-height: 1.3;
+    }
+    @keyframes shimmer { to { background-position: 200% 0; } }
 
-    h1.title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(1.6rem,5vw,2.6rem);letter-spacing:3px;background:linear-gradient(90deg,#7850ff,#c084fc,#7850ff);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 5s linear infinite;margin-bottom:.8rem}
-    @keyframes shimmer{to{background-position:200% 0}}
-    .sub{max-width:500px;font-size:.88rem;line-height:1.7;opacity:.7;margin-bottom:2rem}
-    .btn{font-family:'Orbitron',sans-serif;font-weight:700;font-size:.85rem;padding:14px 42px;border:2px solid #7850ff;background:transparent;color:#c084fc;border-radius:50px;cursor:pointer;letter-spacing:2px;transition:all .35s}
-    .btn:hover{background:rgba(120,80,255,.15);box-shadow:0 0 30px rgba(120,80,255,.45);transform:scale(1.04)}
-    .badge{display:inline-block;font-family:'Orbitron',sans-serif;font-size:.6rem;letter-spacing:3px;padding:5px 16px;border-radius:20px;background:rgba(120,80,255,.12);border:1px solid rgba(120,80,255,.25);color:#b090e0;margin-bottom:1.4rem}
+    .sub {
+      max-width: 500px; width: 100%;
+      font-size: clamp(.78rem, 2.8vw, .9rem);
+      line-height: 1.7; opacity: .7;
+      margin-bottom: 1.8rem;
+      padding: 0 .3rem;
+    }
 
-    /* card */
-    .card{background:rgba(16,12,35,.75);backdrop-filter:blur(8px);border:1px solid rgba(120,80,255,.18);border-radius:18px;padding:2rem;width:100%;max-width:700px;margin-bottom:1.4rem;transition:border-color .4s,box-shadow .4s}
-    .card:hover{border-color:rgba(120,80,255,.35)}
-    .card h2{font-family:'Orbitron',sans-serif;font-size:1rem;color:#c084fc;margin-bottom:.5rem;display:flex;align-items:center;gap:8px;justify-content:center}
-    .card p{font-size:.84rem;line-height:1.65;opacity:.7;margin-bottom:1.2rem}
-    .card .hint-btn{font-size:.72rem;color:#8060b0;cursor:pointer;margin-bottom:.8rem;transition:color .3s;display:inline-block}
-    .card .hint-btn:hover{color:#c084fc}
-    .card .hint-box{display:none;font-size:.78rem;color:#a080d0;background:rgba(120,80,255,.06);padding:10px 14px;border-radius:8px;border-left:3px solid rgba(120,80,255,.25);margin-bottom:1rem}
-    .card .hint-box.show{display:block;animation:fadeUp .35s ease}
-    .card.solved{border-color:rgba(50,220,120,.4);box-shadow:0 0 25px rgba(50,220,120,.12)}
-    .card .solved-tag{display:none;font-family:'Orbitron',sans-serif;font-size:.65rem;letter-spacing:2px;color:#32dc78;margin-top:.8rem;text-align:center}
-    .card.solved .solved-tag{display:block;animation:fadeUp .5s ease}
+    .btn {
+      font-family: 'Orbitron', sans-serif; font-weight: 700;
+      font-size: clamp(.72rem, 2.6vw, .85rem);
+      padding: 13px 36px; border: 2px solid #7850ff;
+      background: transparent; color: #c084fc;
+      border-radius: 50px; cursor: pointer;
+      letter-spacing: 2px; transition: all .3s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:hover, .btn:active {
+      background: rgba(120,80,255,.15);
+      box-shadow: 0 0 28px rgba(120,80,255,.4);
+      transform: scale(1.04);
+    }
 
-    /* ===================== PUZZLE 1: MAZE ===================== */
-    .maze-wrapper{position:relative;display:inline-block;margin:0 auto 1rem;touch-action:none}
-    .maze-wrapper canvas{border-radius:12px;border:2px solid rgba(120,80,255,.2);display:block}
-    .maze-info{font-size:.76rem;color:#8060b0;margin-bottom:.8rem;text-align:center;line-height:1.6}
-    .maze-info strong{color:#c084fc}
-    .maze-timer{font-family:'Orbitron',sans-serif;font-size:.9rem;color:#c084fc;margin-bottom:.6rem;text-align:center;letter-spacing:2px}
+    .badge {
+      display: inline-block; font-family: 'Orbitron', sans-serif;
+      font-size: clamp(.5rem, 2vw, .6rem); letter-spacing: 3px;
+      padding: 5px 14px; border-radius: 20px;
+      background: rgba(120,80,255,.12); border: 1px solid rgba(120,80,255,.25);
+      color: #b090e0; margin-bottom: 1.2rem;
+    }
 
-    /* ===================== PUZZLE 2: LIGHTS OUT ===================== */
-    .lights-grid{display:grid;gap:6px;margin:0 auto 1rem}
-    .lights-cell{aspect-ratio:1;border-radius:12px;cursor:pointer;transition:all .2s;border:2px solid transparent;position:relative;display:flex;align-items:center;justify-content:center}
-    .lights-cell.on{background:rgba(120,80,255,.55);border-color:rgba(120,80,255,.6);box-shadow:0 0 18px rgba(120,80,255,.4)}
-    .lights-cell.off{background:rgba(20,15,35,.6);border-color:rgba(60,40,100,.2)}
-    .lights-cell:hover{transform:scale(1.08)}
-    .lights-cell:active{transform:scale(.95)}
-    .lights-cell.pop{animation:lpop .3s ease}
-    @keyframes lpop{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
-    .lights-moves{font-size:.78rem;color:#8060b0;margin-bottom:.8rem;text-align:center}
-    .lights-moves span{color:#c084fc;font-family:'Orbitron',sans-serif}
+    /* ===== CARD ===== */
+    .card {
+      background: rgba(16,12,35,.78); backdrop-filter: blur(8px);
+      border: 1px solid rgba(120,80,255,.18); border-radius: 18px;
+      padding: clamp(1.2rem, 4vw, 2rem);
+      width: 100%; max-width: 520px;
+      transition: border-color .4s, box-shadow .4s;
+    }
+    .card:hover { border-color: rgba(120,80,255,.3); }
+    .card h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(.82rem, 3vw, 1rem);
+      color: #c084fc; margin-bottom: .4rem;
+      display: flex; align-items: center; gap: 8px; justify-content: center;
+    }
+    .card p {
+      font-size: clamp(.76rem, 2.6vw, .84rem);
+      line-height: 1.65; opacity: .7; margin-bottom: 1rem;
+    }
+    .card .hint-btn {
+      font-size: clamp(.65rem, 2.2vw, .72rem);
+      color: #8060b0; cursor: pointer;
+      margin-bottom: .6rem; display: inline-block;
+      transition: color .3s;
+    }
+    .card .hint-btn:hover, .card .hint-btn:active { color: #c084fc; }
+    .card .hint-box {
+      display: none;
+      font-size: clamp(.68rem, 2.3vw, .78rem);
+      color: #a080d0; background: rgba(120,80,255,.06);
+      padding: 10px 12px; border-radius: 8px;
+      border-left: 3px solid rgba(120,80,255,.25);
+      margin-bottom: 1rem;
+    }
+    .card .hint-box.show { display: block; animation: fadeUp .35s ease; }
+    .card.solved {
+      border-color: rgba(50,220,120,.4);
+      box-shadow: 0 0 25px rgba(50,220,120,.12);
+    }
+    .solved-tag {
+      display: none; font-family: 'Orbitron', sans-serif;
+      font-size: clamp(.58rem, 2vw, .65rem); letter-spacing: 2px;
+      color: #32dc78; margin-top: .8rem; text-align: center;
+    }
+    .card.solved .solved-tag { display: block; animation: fadeUp .5s ease; }
 
-    /* ===================== FINAL PORTAL ===================== */
-    .mega-ring{width:280px;height:280px;border-radius:50%;cursor:pointer;border:3px solid rgba(120,80,255,.5);box-shadow:0 0 70px rgba(120,80,255,.45),inset 0 0 70px rgba(120,80,255,.3);display:flex;align-items:center;justify-content:center;animation:pulse 2s ease-in-out infinite;margin-bottom:2rem;position:relative;overflow:hidden}
-    .mega-ring::before{content:'';position:absolute;width:160%;height:160%;background:conic-gradient(rgba(120,80,255,.25),transparent,rgba(200,130,255,.25),transparent,rgba(120,80,255,.25));animation:spin 5s linear infinite}
-    .mega-ring .inner{position:relative;z-index:1;font-size:4rem;animation:bob 2.5s ease-in-out infinite}
-    .mega-ring:hover{box-shadow:0 0 100px rgba(120,80,255,.6),inset 0 0 90px rgba(120,80,255,.4)}
-    .portal-hint{font-size:.76rem;opacity:.4;animation:bob 4s ease-in-out infinite}
+    /* ===== LIGHTS OUT ===== */
+    .lights-grid {
+      display: grid; gap: clamp(5px, 1.5vw, 8px);
+      margin: 0 auto 1rem;
+    }
+    .lights-cell {
+      aspect-ratio: 1; border-radius: clamp(8px, 2.5vw, 14px);
+      cursor: pointer; transition: all .18s;
+      border: 2px solid transparent;
+      display: flex; align-items: center; justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+    }
+    .lights-cell.on {
+      background: rgba(120,80,255,.55);
+      border-color: rgba(120,80,255,.6);
+      box-shadow: 0 0 16px rgba(120,80,255,.35);
+    }
+    .lights-cell.off {
+      background: rgba(20,15,35,.6);
+      border-color: rgba(60,40,100,.18);
+    }
+    .lights-cell:active { transform: scale(.92); }
+    .lights-cell.pop { animation: lpop .25s ease; }
+    @keyframes lpop { 0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)} }
 
-    /* ===================== CELEBRATION ===================== */
-    .cele-overlay{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;flex-direction:column}
-    .cele-overlay.active{display:flex;animation:celeIn 1s ease}
-    @keyframes celeIn{from{opacity:0}to{opacity:1}}
-    .cele-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at center,rgba(110,30,200,.95),rgba(15,4,50,.98) 65%,rgba(4,0,18,1))}
-    .cele-content{position:relative;z-index:2;text-align:center;padding:2rem}
-    .cele-surprise{font-family:'Orbitron',sans-serif;font-size:clamp(.9rem,2.5vw,1.2rem);letter-spacing:8px;color:#c084fc;margin-bottom:1rem;opacity:0;animation:revTxt 1s ease .4s forwards}
-    @keyframes revTxt{from{opacity:0;transform:translateY(18px);letter-spacing:18px}to{opacity:1;transform:translateY(0);letter-spacing:8px}}
-    .cele-cake{font-size:clamp(4rem,10vw,7rem);animation:bob 2s ease-in-out infinite;margin-bottom:1rem}
-    .cele-msg{font-family:'Pacifico',cursive;font-size:clamp(2rem,7vw,4.8rem);line-height:1.3;background:linear-gradient(135deg,#ff6bca,#ffbe30,#5bffb0,#50aaff,#d080ff);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:rainbow 4s ease infinite,popIn 1s ease .9s both;filter:drop-shadow(0 0 30px rgba(255,100,200,.35));margin-bottom:1.5rem}
-    @keyframes rainbow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-    @keyframes popIn{from{opacity:0;transform:scale(.4) rotate(-5deg)}60%{transform:scale(1.1) rotate(2deg)}to{opacity:1;transform:scale(1) rotate(0)}}
-    .cele-note{font-family:'Space Mono',monospace;font-size:clamp(.78rem,1.6vw,.95rem);color:rgba(255,255,255,.65);max-width:480px;margin:0 auto;line-height:1.8;opacity:0;animation:fadeUp .8s ease 1.8s forwards}
-    #confetti{position:fixed;inset:0;z-index:9998;pointer-events:none}
-    .balloon{position:fixed;bottom:-100px;font-size:2.8rem;z-index:10000;pointer-events:none;animation:rise linear forwards}
-    @keyframes rise{to{bottom:110vh}}
-    .sparkle{position:fixed;width:5px;height:5px;border-radius:50%;pointer-events:none;z-index:10001;animation:sparkOut 1s ease forwards}
-    @keyframes sparkOut{to{opacity:0;transform:scale(0) translateY(-30px)}}
+    .lights-info {
+      display: flex; justify-content: center; gap: clamp(1rem, 4vw, 2rem);
+      margin-bottom: .8rem; flex-wrap: wrap;
+    }
+    .lights-info .stat {
+      font-size: clamp(.68rem, 2.3vw, .78rem); color: #8060b0;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .lights-info .stat span {
+      color: #c084fc; font-family: 'Orbitron', sans-serif;
+      font-size: clamp(.72rem, 2.5vw, .85rem);
+    }
+    .lights-reset {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(.62rem, 2.1vw, .7rem);
+      color: #6050a0; background: none; border: 1px solid rgba(120,80,255,.15);
+      padding: 6px 16px; border-radius: 8px; cursor: pointer;
+      margin-top: .6rem; transition: all .3s;
+    }
+    .lights-reset:hover, .lights-reset:active {
+      color: #c084fc; border-color: rgba(120,80,255,.35);
+    }
 
-    @media(max-width:600px){
-      .ring{width:170px;height:170px} .ring .ico{font-size:3.2rem}
-      .mega-ring{width:210px;height:210px}
-      .card{padding:1.4rem}
+    /* ===== FINAL PORTAL ===== */
+    .mega-ring {
+      --sz: min(65vw, 260px);
+      width: var(--sz); height: var(--sz);
+      border-radius: 50%; cursor: pointer;
+      border: 3px solid rgba(120,80,255,.5);
+      box-shadow: 0 0 60px rgba(120,80,255,.4), inset 0 0 60px rgba(120,80,255,.28);
+      display: flex; align-items: center; justify-content: center;
+      animation: pulse 2s ease-in-out infinite;
+      margin-bottom: 1.6rem; position: relative; overflow: hidden;
+      flex-shrink: 0;
+    }
+    .mega-ring::before {
+      content: ''; position: absolute; width: 160%; height: 160%;
+      background: conic-gradient(rgba(120,80,255,.22),transparent,rgba(200,130,255,.22),transparent,rgba(120,80,255,.22));
+      animation: spin 5s linear infinite;
+    }
+    .mega-ring .inner {
+      position: relative; z-index: 1;
+      font-size: clamp(2.5rem, 10vw, 4rem);
+      animation: bob 2.5s ease-in-out infinite;
+    }
+    .mega-ring:hover, .mega-ring:active {
+      box-shadow: 0 0 90px rgba(120,80,255,.55), inset 0 0 80px rgba(120,80,255,.38);
+    }
+    .portal-hint {
+      font-size: clamp(.65rem, 2.2vw, .76rem);
+      opacity: .4; animation: bob 4s ease-in-out infinite;
+    }
+
+    /* ===== CELEBRATION ===== */
+    .cele-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      display: none; align-items: center; justify-content: center;
+      flex-direction: column; overflow: hidden;
+    }
+    .cele-overlay.active { display: flex; animation: celeIn 1s ease; }
+    @keyframes celeIn { from { opacity: 0; } to { opacity: 1; } }
+    .cele-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse at center, rgba(110,30,200,.95), rgba(15,4,50,.98) 65%, rgba(4,0,18,1));
+    }
+    .cele-content {
+      position: relative; z-index: 2;
+      text-align: center; padding: 1.5rem;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      max-width: 560px; width: 100%;
+    }
+    .cele-surprise {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(.75rem, 3vw, 1.2rem);
+      letter-spacing: clamp(4px, 1.5vw, 8px);
+      color: #c084fc; margin-bottom: .8rem;
+      opacity: 0; animation: revTxt 1s ease .4s forwards;
+    }
+    @keyframes revTxt {
+      from { opacity: 0; transform: translateY(15px); letter-spacing: 15px; }
+      to   { opacity: 1; transform: translateY(0); letter-spacing: 6px; }
+    }
+    .cele-cake {
+      font-size: clamp(3rem, 12vw, 6.5rem);
+      animation: bob 2s ease-in-out infinite;
+      margin-bottom: .8rem;
+    }
+    .cele-msg {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(1.8rem, 8vw, 4.5rem);
+      line-height: 1.3;
+      background: linear-gradient(135deg,#ff6bca,#ffbe30,#5bffb0,#50aaff,#d080ff);
+      background-size: 300% 300%;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: rainbow 4s ease infinite, popIn 1s ease .9s both;
+      filter: drop-shadow(0 0 25px rgba(255,100,200,.3));
+      margin-bottom: 1.2rem;
+    }
+    @keyframes rainbow { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(.4) rotate(-5deg); }
+      60%  { transform: scale(1.1) rotate(2deg); }
+      to   { opacity: 1; transform: scale(1) rotate(0); }
+    }
+    .cele-note {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(.72rem, 2.5vw, .92rem);
+      color: rgba(255,255,255,.6);
+      max-width: 440px; width: 100%;
+      margin: 0 auto; line-height: 1.8;
+      opacity: 0; animation: fadeUp .8s ease 1.8s forwards;
+      padding: 0 .5rem;
+    }
+
+    #confetti { position: fixed; inset: 0; z-index: 9998; pointer-events: none; }
+
+    .balloon {
+      position: fixed; bottom: -100px;
+      font-size: clamp(1.8rem, 6vw, 2.8rem);
+      z-index: 10000; pointer-events: none;
+      animation: rise linear forwards;
+    }
+    @keyframes rise { to { bottom: 110vh; } }
+
+    .sparkle {
+      position: fixed; border-radius: 50%;
+      pointer-events: none; z-index: 10001;
+      animation: sparkOut 1s ease forwards;
+    }
+    @keyframes sparkOut { to { opacity: 0; transform: scale(0) translateY(-25px); } }
+
+    /* ===== MOBILE-FIRST RESPONSIVE ===== */
+    @media (max-width: 380px) {
+      .card { padding: 1rem; }
+    }
+    @media (min-height: 700px) and (max-width: 500px) {
+      .screen { justify-content: center; padding-top: 2rem; padding-bottom: 2rem; }
     }
   </style>
 </head>
@@ -111,60 +323,41 @@
 
 <canvas id="particles"></canvas>
 
-<div class="topbar" id="topbar">
-  <span class="lbl">MISSION</span>
-  <div class="bar"><div class="fill" id="barFill"></div></div>
-  <span class="num" id="barNum">0 / 2</span>
-</div>
-
 <!-- ========== INTRO ========== -->
 <section class="screen active" id="scrIntro">
   <div class="ring"><span class="ico">🔮</span></div>
   <h1 class="title">THE PORTAL AWAITS</h1>
-  <p class="sub">A classified signal has been intercepted from beyond the void. Two encrypted fragments must be recovered to unlock the gateway. Only the sharpest minds survive.</p>
+  <p class="sub">A classified signal has been intercepted from beyond the void. One encrypted fragment must be recovered to unlock the gateway. Only the sharpest minds survive.</p>
   <button class="btn" id="btnStart">ENTER THE PORTAL</button>
 </section>
 
-<!-- ========== PUZZLE 1 — MAZE ========== -->
-<section class="screen" id="scrP1">
-  <span class="badge">🌀 Fragment 1 of 2</span>
-  <div class="card" id="cardP1">
-    <h2>🌀 The Void Maze</h2>
-    <p>Navigate the orb through the labyrinth to reach the exit portal. Use <strong>arrow keys</strong>, <strong>WASD</strong>, or <strong>swipe</strong> on mobile. The void shifts — stay sharp.</p>
-    <div class="hint-btn" onclick="toggleHint('h1')">💡 Hint</div>
-    <div class="hint-box" id="h1">Hug the right wall — it usually finds a way out. Don't rush.</div>
-    <div class="maze-timer" id="mazeTimer">00:00</div>
-    <div class="maze-info">🟣 You &nbsp; → &nbsp; 🟢 Exit</div>
-    <div class="maze-wrapper" id="mazeWrapper">
-      <canvas id="mazeCanvas"></canvas>
-    </div>
-    <div class="solved-tag">✓ FRAGMENT RECOVERED</div>
-  </div>
-</section>
-
-<!-- ========== PUZZLE 2 — LIGHTS OUT ========== -->
-<section class="screen" id="scrP2">
-  <span class="badge">💡 Fragment 2 of 2</span>
-  <div class="card" id="cardP2">
+<!-- ========== PUZZLE — LIGHTS OUT ========== -->
+<section class="screen" id="scrPuzzle">
+  <span class="badge">💡 Encrypted Fragment</span>
+  <div class="card" id="cardPuzzle">
     <h2>💡 Lights Out Protocol</h2>
-    <p>All lights must be turned <strong>OFF</strong> to decrypt the final fragment. But here's the catch — clicking a light also toggles its <strong>neighbors</strong> (up, down, left, right). Think several moves ahead.</p>
-    <div class="hint-btn" onclick="toggleHint('h2')">💡 Hint</div>
-    <div class="hint-box" id="h2">Try working row by row from top to bottom. Clicking the bottom row can fix the top without ruining what you've solved — a technique called "chasing."</div>
-    <div class="lights-moves">Moves: <span id="lightsCount">0</span></div>
+    <p>Turn <strong>ALL lights OFF</strong> to decrypt the fragment. Clicking a light toggles it <strong>and its neighbors</strong> (↑↓←→). Think before you tap.</p>
+    <div class="hint-btn" onclick="toggleHint('h1')">💡 Need a hint?</div>
+    <div class="hint-box" id="h1">Work top to bottom — for each lit cell in a row, click the cell directly below it. Once you reach the bottom row, you may need to restart with a different first-row strategy. This is called <strong>"chasing"</strong>.</div>
+    <div class="lights-info">
+      <div class="stat">Moves: <span id="moveCount">0</span></div>
+      <div class="stat">Lit: <span id="litCount">0</span></div>
+    </div>
     <div class="lights-grid" id="lightsGrid"></div>
-    <div class="solved-tag">✓ FRAGMENT RECOVERED</div>
+    <button class="lights-reset" id="resetBtn">↻ Reset Puzzle</button>
+    <div class="solved-tag">✓ FRAGMENT DECRYPTED — GATEWAY UNLOCKED</div>
   </div>
 </section>
 
 <!-- ========== FINAL PORTAL ========== -->
 <section class="screen" id="scrFinal">
-  <span class="badge">⚡ ALL FRAGMENTS RECOVERED</span>
-  <h1 class="title" style="font-size:clamp(1.2rem,3.5vw,2rem)">The Gateway Is Open</h1>
-  <p class="sub">Both fragments reassembled. The portal hums with raw energy. Whatever is on the other side… there's no going back.</p>
+  <span class="badge">⚡ FRAGMENT RECOVERED</span>
+  <h1 class="title" style="font-size:clamp(1.1rem,4.5vw,1.9rem)">The Gateway Is Open</h1>
+  <p class="sub">The fragment is reassembled. The portal hums with raw energy. Whatever is on the other side… there's no going back.</p>
   <div class="mega-ring" id="megaPortal">
     <span class="inner">🌀</span>
   </div>
-  <p class="portal-hint">Click the portal to cross over…</p>
+  <p class="portal-hint">Tap the portal to cross over…</p>
 </section>
 
 <!-- ========== CELEBRATION ========== -->
@@ -175,7 +368,7 @@
     <div class="cele-surprise">✦ SURPRISE ✦</div>
     <div class="cele-cake">🎂</div>
     <div class="cele-msg">Happy Birthday,<br>Bro!</div>
-    <p class="cele-note">🎈 The whole "classified mission" was a setup! There never was a portal — just a crew of people who wanted to make your day unforgettable. Here's to an amazing year ahead! 🎉</p>
+    <p class="cele-note">🎈 The whole "classified mission" was a setup! There was never a portal — just people who wanted to make your day unforgettable. Here's to an incredible year ahead! 🎉</p>
   </div>
 </div>
 
@@ -183,253 +376,248 @@
 /* =============================================================
    PARTICLES
    ============================================================= */
-const pc=document.getElementById('particles'),px=pc.getContext('2d');let pts=[];
-function rP(){pc.width=innerWidth;pc.height=innerHeight}rP();addEventListener('resize',rP);
-class Pt{constructor(){this.reset()}reset(){this.x=Math.random()*pc.width;this.y=Math.random()*pc.height;this.r=Math.random()*2+.4;this.dx=(Math.random()-.5)*.35;this.dy=(Math.random()-.5)*.35;this.o=Math.random()*.4+.08;this.h=255+Math.random()*40}update(){this.x+=this.dx;this.y+=this.dy;if(this.x<0||this.x>pc.width||this.y<0||this.y>pc.height)this.reset()}draw(){px.beginPath();px.arc(this.x,this.y,this.r,0,Math.PI*2);px.fillStyle=`hsla(${this.h},65%,68%,${this.o})`;px.fill()}}
-for(let i=0;i<80;i++)pts.push(new Pt());
-(function a(){px.clearRect(0,0,pc.width,pc.height);pts.forEach(p=>{p.update();p.draw()});requestAnimationFrame(a)})();
+const pc = document.getElementById('particles'), px = pc.getContext('2d');
+let pts = [];
+function rP() { pc.width = innerWidth; pc.height = innerHeight; }
+rP(); addEventListener('resize', rP);
+class Pt {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * pc.width;
+    this.y = Math.random() * pc.height;
+    this.r = Math.random() * 2 + .3;
+    this.dx = (Math.random() - .5) * .3;
+    this.dy = (Math.random() - .5) * .3;
+    this.o = Math.random() * .38 + .06;
+    this.h = 255 + Math.random() * 40;
+  }
+  update() {
+    this.x += this.dx; this.y += this.dy;
+    if (this.x < 0 || this.x > pc.width || this.y < 0 || this.y > pc.height) this.reset();
+  }
+  draw() {
+    px.beginPath();
+    px.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    px.fillStyle = `hsla(${this.h},65%,68%,${this.o})`;
+    px.fill();
+  }
+}
+for (let i = 0; i < 70; i++) pts.push(new Pt());
+(function anim() {
+  px.clearRect(0, 0, pc.width, pc.height);
+  pts.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(anim);
+})();
 
 /* =============================================================
    NAV
    ============================================================= */
-function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');scrollTo({top:0,behavior:'smooth'})}
-document.getElementById('btnStart').onclick=()=>{go('scrP1');document.getElementById('topbar').classList.add('show');startMazeTimer()};
-function toggleHint(id){document.getElementById(id).classList.toggle('show')}
+function go(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.getElementById('btnStart').onclick = () => go('scrPuzzle');
+function toggleHint(id) { document.getElementById(id).classList.toggle('show'); }
 
-let solved=[false,false];
-function markDone(n){
-  if(solved[n])return;solved[n]=true;
-  const cnt=solved.filter(Boolean).length;
-  document.getElementById('barFill').style.width=(cnt/2*100)+'%';
-  document.getElementById('barNum').textContent=cnt+' / 2';
-  document.getElementById('cardP'+(n+1)).classList.add('solved');
-  setTimeout(()=>{
-    if(cnt<2){for(let i=0;i<2;i++)if(!solved[i]){go('scrP'+(i+1));return}}
-    else{document.getElementById('topbar').classList.remove('show');go('scrFinal')}
-  },1100);
+/* =============================================================
+   LIGHTS OUT  (5×5)
+   ============================================================= */
+const SIZE = 5;
+const grid = document.getElementById('lightsGrid');
+const cellSize = 'clamp(46px, 14vw, 64px)';
+grid.style.gridTemplateColumns = `repeat(${SIZE}, ${cellSize})`;
+grid.style.justifyContent = 'center';
+
+let state = [], moves = 0, puzzleSolved = false;
+let savedSeed = []; // to allow reset to same puzzle
+
+function initBoard() {
+  state = Array(SIZE * SIZE).fill(false);
+  moves = 0; puzzleSolved = false;
+  document.getElementById('moveCount').textContent = 0;
+  document.getElementById('cardPuzzle').classList.remove('solved');
+
+  // Generate solvable board: apply 10-14 random toggles to a solved (all off) board
+  const clicks = 10 + Math.floor(Math.random() * 5);
+  savedSeed = [];
+  for (let i = 0; i < clicks; i++) {
+    const idx = Math.floor(Math.random() * SIZE * SIZE);
+    savedSeed.push(idx);
+    applyToggle(idx, true);
+  }
+  // make sure it's not already solved
+  if (state.every(v => !v)) {
+    const extra = Math.floor(Math.random() * SIZE * SIZE);
+    savedSeed.push(extra);
+    applyToggle(extra, true);
+  }
+  updateLitCount();
+  render();
 }
 
-/* =============================================================
-   PUZZLE 1 — MAZE (Recursive Backtracker)
-   ============================================================= */
-;(function(){
-  const cvs=document.getElementById('mazeCanvas');
-  const ctx=cvs.getContext('2d');
-  const COLS=14, ROWS=10, CELL=30, WALL=4;
-  const W=COLS*CELL, H=ROWS*CELL;
-  cvs.width=W; cvs.height=H;
+function resetBoard() {
+  state = Array(SIZE * SIZE).fill(false);
+  moves = 0; puzzleSolved = false;
+  document.getElementById('moveCount').textContent = 0;
+  document.getElementById('cardPuzzle').classList.remove('solved');
+  savedSeed.forEach(idx => applyToggle(idx, true));
+  updateLitCount();
+  render();
+}
 
-  // responsive sizing
-  const wrapper=document.getElementById('mazeWrapper');
-  function fitMaze(){
-    const maxW=Math.min(innerWidth-48,700);
-    if(W>maxW){const s=maxW/W;cvs.style.width=maxW+'px';cvs.style.height=(H*s)+'px'}
-    else{cvs.style.width=W+'px';cvs.style.height=H+'px'}
+function applyToggle(idx, silent) {
+  const r = Math.floor(idx / SIZE), c = idx % SIZE;
+  state[idx] = !state[idx];
+  if (r > 0) state[idx - SIZE] = !state[idx - SIZE];
+  if (r < SIZE - 1) state[idx + SIZE] = !state[idx + SIZE];
+  if (c > 0) state[idx - 1] = !state[idx - 1];
+  if (c < SIZE - 1) state[idx + 1] = !state[idx + 1];
+  if (!silent) {
+    moves++;
+    document.getElementById('moveCount').textContent = moves;
+    updateLitCount();
   }
-  fitMaze(); addEventListener('resize',fitMaze);
+}
 
-  // grid
-  let grid=[], stack=[];
-  class Cell{
-    constructor(c,r){this.c=c;this.r=r;this.walls={t:true,r:true,b:true,l:true};this.visited=false}
-    neighbors(){
-      const n=[];
-      if(this.r>0&&!grid[idx(this.c,this.r-1)].visited)n.push(grid[idx(this.c,this.r-1)]);
-      if(this.c<COLS-1&&!grid[idx(this.c+1,this.r)].visited)n.push(grid[idx(this.c+1,this.r)]);
-      if(this.r<ROWS-1&&!grid[idx(this.c,this.r+1)].visited)n.push(grid[idx(this.c,this.r+1)]);
-      if(this.c>0&&!grid[idx(this.c-1,this.r)].visited)n.push(grid[idx(this.c-1,this.r)]);
-      return n;
-    }
-  }
-  function idx(c,r){return r*COLS+c}
-  function removeWalls(a,b){
-    const dc=a.c-b.c, dr=a.r-b.r;
-    if(dc===1){a.walls.l=false;b.walls.r=false}
-    if(dc===-1){a.walls.r=false;b.walls.l=false}
-    if(dr===1){a.walls.t=false;b.walls.b=false}
-    if(dr===-1){a.walls.b=false;b.walls.t=false}
-  }
+function updateLitCount() {
+  document.getElementById('litCount').textContent = state.filter(Boolean).length;
+}
 
-  function generate(){
-    grid=[];stack=[];
-    for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)grid.push(new Cell(c,r));
-    let cur=grid[0];cur.visited=true;stack.push(cur);
-    while(stack.length){
-      const nb=cur.neighbors();
-      if(nb.length){
-        const next=nb[Math.floor(Math.random()*nb.length)];
-        removeWalls(cur,next);next.visited=true;stack.push(cur);cur=next;
-      }else{cur=stack.pop()}
-    }
-  }
-  generate();
+function render() {
+  grid.innerHTML = '';
+  state.forEach((on, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'lights-cell ' + (on ? 'on' : 'off');
+    cell.addEventListener('click', () => handleClick(i));
+    // ripple neighbor indicator on hover/touch
+    grid.appendChild(cell);
+  });
+}
 
-  // player
-  let pCol=0,pRow=0;
-  const exitCol=COLS-1,exitRow=ROWS-1;
-  let mazeWon=false;
+function handleClick(i) {
+  if (puzzleSolved) return;
+  applyToggle(i, false);
 
-  // timer
-  let timerStart,timerRAF;
-  function startMazeTimer(){timerStart=Date.now();tickTimer()}
-  function tickTimer(){
-    if(mazeWon)return;
-    const s=Math.floor((Date.now()-timerStart)/1000);
-    const m=String(Math.floor(s/60)).padStart(2,'0');
-    const sec=String(s%60).padStart(2,'0');
-    document.getElementById('mazeTimer').textContent=m+':'+sec;
-    timerRAF=requestAnimationFrame(tickTimer);
-  }
+  // animate the clicked cell + neighbors
+  const r = Math.floor(i / SIZE), c = i % SIZE;
+  const targets = [i];
+  if (r > 0) targets.push(i - SIZE);
+  if (r < SIZE - 1) targets.push(i + SIZE);
+  if (c > 0) targets.push(i - 1);
+  if (c < SIZE - 1) targets.push(i + 1);
 
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    // BG
-    ctx.fillStyle='#0c0a18';ctx.fillRect(0,0,W,H);
-    // cells & walls
-    grid.forEach(cell=>{
-      const x=cell.c*CELL,y=cell.r*CELL;
-      ctx.strokeStyle='rgba(120,80,255,.35)';ctx.lineWidth=WALL;ctx.lineCap='round';
-      if(cell.walls.t){ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+CELL,y);ctx.stroke()}
-      if(cell.walls.r){ctx.beginPath();ctx.moveTo(x+CELL,y);ctx.lineTo(x+CELL,y+CELL);ctx.stroke()}
-      if(cell.walls.b){ctx.beginPath();ctx.moveTo(x+CELL,y+CELL);ctx.lineTo(x,y+CELL);ctx.stroke()}
-      if(cell.walls.l){ctx.beginPath();ctx.moveTo(x,y+CELL);ctx.lineTo(x,y);ctx.stroke()}
-    });
-    // exit glow
-    const ex=exitCol*CELL+CELL/2,ey=exitRow*CELL+CELL/2;
-    const grd=ctx.createRadialGradient(ex,ey,2,ex,ey,CELL*.7);
-    grd.addColorStop(0,'rgba(50,220,120,.3)');grd.addColorStop(1,'transparent');
-    ctx.fillStyle=grd;ctx.fillRect(exitCol*CELL,exitRow*CELL,CELL,CELL);
-    ctx.fillStyle='#32dc78';ctx.font='16px serif';ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.fillText('🟢',ex,ey);
-    // player
-    const px2=pCol*CELL+CELL/2,py2=pRow*CELL+CELL/2;
-    const pg=ctx.createRadialGradient(px2,py2,2,px2,py2,CELL*.55);
-    pg.addColorStop(0,'rgba(120,80,255,.35)');pg.addColorStop(1,'transparent');
-    ctx.fillStyle=pg;ctx.fillRect(pCol*CELL,pRow*CELL,CELL,CELL);
-    ctx.fillStyle='#c084fc';ctx.font='16px serif';
-    ctx.fillText('🟣',px2,py2);
-  }
-  draw();
+  render();
 
-  function tryMove(dc,dr){
-    if(mazeWon)return;
-    const cur=grid[idx(pCol,pRow)];
-    if(dc===0&&dr===-1&&!cur.walls.t){pRow--}
-    else if(dc===1&&dr===0&&!cur.walls.r){pCol++}
-    else if(dc===0&&dr===1&&!cur.walls.b){pRow++}
-    else if(dc===-1&&dr===0&&!cur.walls.l){pCol--}
-    else return;
-    draw();
-    if(pCol===exitCol&&pRow===exitRow){mazeWon=true;cancelAnimationFrame(timerRAF);markDone(0)}
-  }
-
-  // keyboard
-  addEventListener('keydown',e=>{
-    const map={'ArrowUp':[0,-1],'ArrowDown':[0,1],'ArrowLeft':[-1,0],'ArrowRight':[1,0],'w':[0,-1],'s':[0,1],'a':[-1,0],'d':[1,0],'W':[0,-1],'S':[0,1],'A':[-1,0],'D':[1,0]};
-    if(map[e.key]){e.preventDefault();tryMove(...map[e.key])}
+  targets.forEach(t => {
+    const el = grid.children[t];
+    if (el) { el.classList.add('pop'); }
   });
 
-  // swipe
-  let tx,ty;
-  cvs.addEventListener('touchstart',e=>{const t=e.touches[0];tx=t.clientX;ty=t.clientY},{passive:true});
-  cvs.addEventListener('touchend',e=>{
-    const t=e.changedTouches[0];const dx=t.clientX-tx,dy=t.clientY-ty;
-    if(Math.abs(dx)<15&&Math.abs(dy)<15)return;
-    if(Math.abs(dx)>Math.abs(dy)){tryMove(dx>0?1:-1,0)}else{tryMove(0,dy>0?1:-1)}
-  },{passive:true});
-
-  // click-to-move (tap adjacent cell)
-  cvs.addEventListener('click',e=>{
-    const rect=cvs.getBoundingClientRect();
-    const scaleX=W/rect.width,scaleY=H/rect.height;
-    const mx=(e.clientX-rect.left)*scaleX,my=(e.clientY-rect.top)*scaleY;
-    const cc=Math.floor(mx/CELL),cr=Math.floor(my/CELL);
-    const dc=cc-pCol,dr=cr-pRow;
-    if(Math.abs(dc)+Math.abs(dr)===1)tryMove(dc,dr);
-  });
-})();
-
-/* =============================================================
-   PUZZLE 2 — LIGHTS OUT (5×5)
-   ============================================================= */
-;(function(){
-  const SIZE=5;
-  const grid=document.getElementById('lightsGrid');
-  grid.style.gridTemplateColumns=`repeat(${SIZE},clamp(48px,12vw,62px))`;
-  grid.style.maxWidth=(SIZE*68)+'px';
-  let state=[], moves=0;
-
-  // generate guaranteed-solvable board by starting solved and applying random clicks
-  function initBoard(){
-    state=Array(SIZE*SIZE).fill(false);
-    const clicks=8+Math.floor(Math.random()*5); // 8-12 random clicks
-    for(let i=0;i<clicks;i++){
-      const idx=Math.floor(Math.random()*SIZE*SIZE);
-      applyToggle(idx,true);
-    }
-    // if accidentally solved, add one more
-    if(state.every(v=>!v)){applyToggle(Math.floor(Math.random()*SIZE*SIZE),true)}
-    moves=0;document.getElementById('lightsCount').textContent=0;
-    render();
+  // check win
+  if (state.every(v => !v)) {
+    puzzleSolved = true;
+    document.getElementById('cardPuzzle').classList.add('solved');
+    setTimeout(() => go('scrFinal'), 1200);
   }
+}
 
-  function applyToggle(idx,silent){
-    const r=Math.floor(idx/SIZE),c=idx%SIZE;
-    state[idx]=!state[idx];
-    if(r>0)state[idx-SIZE]=!state[idx-SIZE];
-    if(r<SIZE-1)state[idx+SIZE]=!state[idx+SIZE];
-    if(c>0)state[idx-1]=!state[idx-1];
-    if(c<SIZE-1)state[idx+1]=!state[idx+1];
-    if(!silent){
-      moves++;document.getElementById('lightsCount').textContent=moves;
-    }
-  }
-
-  function render(){
-    grid.innerHTML='';
-    state.forEach((on,i)=>{
-      const cell=document.createElement('div');
-      cell.className='lights-cell '+(on?'on':'off');
-      cell.onclick=()=>{
-        if(solved[1])return;
-        applyToggle(i,false);
-        cell.classList.add('pop');
-        render();
-        if(state.every(v=>!v)){markDone(1)}
-      };
-      grid.appendChild(cell);
-    });
-  }
-  initBoard();
-})();
+document.getElementById('resetBtn').onclick = resetBoard;
+initBoard();
 
 /* =============================================================
    FINAL PORTAL → CELEBRATION
    ============================================================= */
-document.getElementById('megaPortal').onclick=celebrate;
-let celed=false;
-function celebrate(){
-  if(celed)return;celed=true;
-  const f=document.createElement('div');
-  f.style.cssText='position:fixed;inset:0;background:#fff;z-index:9997;animation:fO .8s ease forwards';
-  document.head.insertAdjacentHTML('beforeend','<style>@keyframes fO{0%{opacity:1}100%{opacity:0}}</style>');
-  document.body.appendChild(f);setTimeout(()=>f.remove(),900);
-  setTimeout(()=>{document.getElementById('celeOverlay').classList.add('active');fireConfetti();fireBalloons();fireSparkles()},350);
+document.getElementById('megaPortal').onclick = celebrate;
+let celed = false;
+
+function celebrate() {
+  if (celed) return; celed = true;
+
+  // white flash
+  const f = document.createElement('div');
+  f.style.cssText = 'position:fixed;inset:0;background:#fff;z-index:9997;animation:fO .8s ease forwards';
+  document.head.insertAdjacentHTML('beforeend', '<style>@keyframes fO{0%{opacity:1}100%{opacity:0}}</style>');
+  document.body.appendChild(f);
+  setTimeout(() => f.remove(), 900);
+
+  setTimeout(() => {
+    document.getElementById('celeOverlay').classList.add('active');
+    fireConfetti();
+    fireBalloons();
+    fireSparkles();
+  }, 350);
 }
 
-function fireConfetti(){
-  const cv=document.getElementById('confetti'),cx=cv.getContext('2d');cv.width=innerWidth;cv.height=innerHeight;
-  const cols=['#ff6bca','#ffbe30','#5bffb0','#50aaff','#d080ff','#ff5050','#ff9500'];let bits=[];
-  for(let i=0;i<240;i++)bits.push({x:Math.random()*cv.width,y:Math.random()*cv.height-cv.height,w:Math.random()*10+4,h:Math.random()*6+3,c:cols[~~(Math.random()*cols.length)],sy:Math.random()*3+2,sx:(Math.random()-.5)*2,r:Math.random()*360,rs:(Math.random()-.5)*10,o:1});
-  (function d(){cx.clearRect(0,0,cv.width,cv.height);let alive=false;bits.forEach(b=>{b.y+=b.sy;b.x+=b.sx;b.r+=b.rs;if(b.y>cv.height+20)b.o-=.015;if(b.o<=0)return;alive=true;cx.save();cx.translate(b.x,b.y);cx.rotate(b.r*Math.PI/180);cx.globalAlpha=b.o;cx.fillStyle=b.c;cx.fillRect(-b.w/2,-b.h/2,b.w,b.h);cx.restore()});if(alive)requestAnimationFrame(d)})();
+/* ===== CONFETTI ===== */
+function fireConfetti() {
+  const cv = document.getElementById('confetti'), cx = cv.getContext('2d');
+  cv.width = innerWidth; cv.height = innerHeight;
+  const cols = ['#ff6bca','#ffbe30','#5bffb0','#50aaff','#d080ff','#ff5050','#ff9500'];
+  let bits = [];
+  const count = Math.min(200, Math.floor(innerWidth * .35));
+  for (let i = 0; i < count; i++) {
+    bits.push({
+      x: Math.random() * cv.width,
+      y: Math.random() * cv.height - cv.height,
+      w: Math.random() * 9 + 4, h: Math.random() * 5 + 3,
+      c: cols[~~(Math.random() * cols.length)],
+      sy: Math.random() * 3 + 1.8,
+      sx: (Math.random() - .5) * 2,
+      r: Math.random() * 360, rs: (Math.random() - .5) * 10,
+      o: 1
+    });
+  }
+  (function d() {
+    cx.clearRect(0, 0, cv.width, cv.height);
+    let alive = false;
+    bits.forEach(b => {
+      b.y += b.sy; b.x += b.sx; b.r += b.rs;
+      if (b.y > cv.height + 20) b.o -= .015;
+      if (b.o <= 0) return;
+      alive = true;
+      cx.save(); cx.translate(b.x, b.y); cx.rotate(b.r * Math.PI / 180);
+      cx.globalAlpha = b.o; cx.fillStyle = b.c;
+      cx.fillRect(-b.w / 2, -b.h / 2, b.w, b.h);
+      cx.restore();
+    });
+    if (alive) requestAnimationFrame(d);
+  })();
 }
-function fireBalloons(){
-  const em=['🎈','🎈','🎈','🎁','⭐','🎈','💜','🎈','🎈','🎈','🎈','🎈','🎈','🎈','🎈','🎈'];
-  for(let i=0;i<16;i++)setTimeout(()=>{const b=document.createElement('div');b.className='balloon';b.textContent=em[i%em.length];b.style.left=Math.random()*90+5+'%';b.style.animationDuration=Math.random()*4+5+'s';b.style.fontSize=Math.random()*1.2+2.2+'rem';document.body.appendChild(b);setTimeout(()=>b.remove(),11000)},i*280);
+
+/* ===== BALLOONS ===== */
+function fireBalloons() {
+  const em = ['🎈','🎈','🎈','🎁','⭐','🎈','💜','🎈','🎈','🎈'];
+  const total = Math.min(14, Math.floor(innerWidth / 30));
+  for (let i = 0; i < total; i++) {
+    setTimeout(() => {
+      const b = document.createElement('div');
+      b.className = 'balloon';
+      b.textContent = em[i % em.length];
+      b.style.left = Math.random() * 88 + 6 + '%';
+      b.style.animationDuration = Math.random() * 4 + 5 + 's';
+      document.body.appendChild(b);
+      setTimeout(() => b.remove(), 11000);
+    }, i * 300);
+  }
 }
-function fireSparkles(){
-  const cols=['#ff6bca','#ffbe30','#5bffb0','#50aaff','#d080ff'];
-  for(let i=0;i<50;i++)setTimeout(()=>{const s=document.createElement('div');s.className='sparkle';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.background=cols[~~(Math.random()*cols.length)];s.style.width=s.style.height=Math.random()*5+3+'px';document.body.appendChild(s);setTimeout(()=>s.remove(),1200)},i*80);
+
+/* ===== SPARKLES ===== */
+function fireSparkles() {
+  const cols = ['#ff6bca','#ffbe30','#5bffb0','#50aaff','#d080ff'];
+  for (let i = 0; i < 40; i++) {
+    setTimeout(() => {
+      const s = document.createElement('div');
+      s.className = 'sparkle';
+      s.style.left = Math.random() * 100 + '%';
+      s.style.top = Math.random() * 100 + '%';
+      s.style.background = cols[~~(Math.random() * cols.length)];
+      const sz = Math.random() * 5 + 3;
+      s.style.width = s.style.height = sz + 'px';
+      document.body.appendChild(s);
+      setTimeout(() => s.remove(), 1200);
+    }, i * 85);
+  }
 }
 </script>
 </body>
